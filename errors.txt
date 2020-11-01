@@ -1,0 +1,11 @@
+﻿I'm sorry, but errors were detected in your script. Please correct the
+errors listed below, and try again.
+
+
+File "game/script.rpy", line 283: invalid syntax
+    $ renpy.notify (u"Возможно, персонаж говорит неправду, что влечёт за собой последствия. Делайте выбор осторожно.")
+     ^
+    
+
+Ren'Py Version: Ren'Py 7.3.5.606
+Mon Oct 19 23:33:36 2020

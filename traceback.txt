@@ -1,0 +1,34 @@
+﻿I'm sorry, but an uncaught exception occurred.
+
+While running game code:
+  File "game/script.rpy", line 8, in script
+    $ restore_all_characters()
+  File "game/script.rpy", line 8, in <module>
+    $ restore_all_characters()
+  File "game/all_assets.rpy", line 145, in restore_all_characters
+    open(user_dir + "/characters/alan.chr", "wb").write(renpy.file("alan.chr").read())
+IOError: Couldn't find file 'alan.chr'.
+
+-- Full Traceback ------------------------------------------------------------
+
+Full traceback:
+  File "game/script.rpy", line 8, in script
+    $ restore_all_characters()
+  File "C:\renpy-7.3.5-sdk\renpy\ast.py", line 914, in execute
+    renpy.python.py_exec_bytecode(self.code.bytecode, self.hide, store=self.store)
+  File "C:\renpy-7.3.5-sdk\renpy\python.py", line 2028, in py_exec_bytecode
+    exec bytecode in globals, locals
+  File "game/script.rpy", line 8, in <module>
+    $ restore_all_characters()
+  File "game/all_assets.rpy", line 145, in restore_all_characters
+    open(user_dir + "/characters/alan.chr", "wb").write(renpy.file("alan.chr").read())
+  File "C:\renpy-7.3.5-sdk\renpy\exports.py", line 2255, in file
+    return renpy.loader.load(fn)
+  File "C:\renpy-7.3.5-sdk\renpy\loader.py", line 576, in load
+    raise IOError("Couldn't find file '%s'." % name)
+IOError: Couldn't find file 'alan.chr'.
+
+Windows-8-6.2.9200
+Ren'Py 7.3.5.606
+TamGdeNasNet 1.0
+Sun Oct 18 20:25:25 2020
