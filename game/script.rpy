@@ -8,12 +8,11 @@ label start:
     $ renpy.block_rollback()
     $ restore_all_characters()
     if persistent.playthrough == 0:
-        jump day_1
+        jump day1
     else:
         jump true_ending
 
-label day_1:
-    jump true_ending
+label day1:
     $ renpy.music.stop()
     $ skip_text_blocks = True
     $ renpy.block_rollback()
@@ -43,7 +42,7 @@ label day_1:
     "Я улыбаюсь своим мыслям и ставлю точку в последнем ответе."
     stop music
     play music "audio/dokidoki10.ogg"
-    scene hall_a with dissolve_scene_half
+    scene hall_a with dissolve
     "Экзамен оказался немного сложнее, чем я думал, так что я сдал одним из последних."
     "Остальные еще стояли в коридоре – кто-то ждал друзей, кто-то просто хотел поболтать. {w} Когда я вышел, то почти врезался в Алана, своего одноклассника, очень общительного и веселого парня."
     show a002 with moveinleft

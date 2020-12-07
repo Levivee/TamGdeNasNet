@@ -5,10 +5,11 @@ label day2:
     $ sar4evr = False
     $ monscene1 = False
     $ monscene2 = False
-    $ alscene = False
+    $ alscene1 = False
     $ saiscene = False
     $ saitruescene = False
     $ hatescene = False
+
     scene black with dissolve
     stop music
     play music "audio/so_good_to_be_careless.ogg"
@@ -1496,7 +1497,7 @@ label day2:
 
                         scene sch_a with dissolve
                         "На улице около школы меня уже ждала Сара, нетерпеливо переминаясь с ноги на ногу."
-                        show s028 with dissove
+                        show s028 with dissolve
                         sar "Где тебя черти носят? Я уже подмерзать начала!"
                         hide s028
                         show s011
@@ -1639,16 +1640,16 @@ label day2:
             hide tch005
             show tch003 at left
             hide m018
-            show m027
+            show m027 at right
             tch "Отойди от мальчиков, пожалуйста."
             hide a211
             show a215
             hide m027
-            show m026
+            show m026 at right
             al "Ох, Моника-Моника…"
             hide tch003 with moveoutright
             hide m026
-            show m004
+            show m004 at right
             "Моника метнула на него уничтожительный взгляд и демонстративно отошла к девочкам."
             hide m004 with moveoutright
             hide a215

@@ -524,6 +524,10 @@ init:
     image m118="images/monika/mon118.png"
     image m119="images/monika/mon119.png"
     image m120="images/monika/mon120.png"
+    image m220="images/monika/mon220.png"
+    image m221="images/monika/mon221.png"
+    image m222="images/monika/mon222.png"
+    image m223="images/monika/mon223.png"
 
     image sa000="images/saimon/sai000.png"   # Саймон
     image sa001="images/saimon/sai001.png"
