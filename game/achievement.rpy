@@ -94,9 +94,9 @@ init python:
                                                              "text": "С пеленок до самого заката.", 
                                                              "icon": "images/icons/achiv.png" # 96x96
                                                              },
-                                        "edwin": {"type": 0,
-                                                             "title": "Эдвин",
-                                                             "text": "Краткость - сестра таланта, друг гения.",
+                                        "saimon": {"type": 0,
+                                                             "title": "Саймон",
+                                                             "text": "Родственные души мыслят одинаково.",
                                                              "icon": "images/icons/achiv.png",
                                                              },
                                         "alan": {"type": 0,

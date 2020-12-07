@@ -15,7 +15,35 @@
     "Не забудьте сделать копию файла персонажа Сары." 
     ]
     
-    
+screen dialog(message, ok_action):
+
+
+    modal True
+
+    zorder 200
+
+    style_prefix "confirm"
+
+    add "gui/overlay/confirm.png"
+
+    frame:
+
+        has vbox:
+            xalign .5
+            yalign .5
+            spacing 30
+
+        label _(message):
+            style "confirm_prompt"
+            xalign 0.5
+
+        hbox:
+            xalign 0.5
+            spacing 100
+
+            textbutton _("OK") action ok_action
+
+
 image intro:
     truecenter
     "white"
@@ -91,6 +119,8 @@ label splashscreen:
         menu:
             "Играя в «Там, где нас нет», вы соглашаетесь с тем, что вы ознакомились с файлом Read_Me перед игрой."
             "Согласен.":
+                "Будьте внимательны: каждое ваше решение будет иметь последствия."
+                "Сохранятесь чаще и {i}выбирайте с умом.{/i}"
                 pass
         $ persistent.first_run = True
         pause 1.0
@@ -106,7 +136,9 @@ label splashscreen:
 
     $ basedir = user_dir.replace('\\', '/')
 
-
+    if quick_end:
+        show poem_end
+        $ renpy.quit()
 
     if s_kill_early:
         show black
@@ -130,17 +162,20 @@ label splashscreen:
         stop music
         scene black
         "Сохранение не может быть загружено."
-        nn "Ты что, хочешь меня обмануть?"
-        show sara off
+        sar "Ты что, хочешь меня обмануть?"
+        show s008 with dissolve
         if persistent.playername == "":
-            m "Не делай так больше"
+            sar "Не делай так больше"
         else:
-            m "Не делай так больше, [persistent.playername]."
+            sar "Не делай так больше, [name]."
         $ renpy.utter_restart()
     else:
         if persistent.playthrough == 0 and not persistent.first_load and not config.developer:
             $ persistent.first_load = True
-            call screen dialog("Подсказка: используйте кнопку «Пропуск» для\nбыстрой прокрутки уже прочитанного текста.", ok_action=Return()) 
+            call screen dialog("Подсказка: используйте кнопку «Пропуск» для\nбыстрой прокрутки уже прочитанного текста.", ok_action=Return())
+
+
+
     return
 
                                   

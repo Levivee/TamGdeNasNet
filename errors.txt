@@ -2,10 +2,13 @@
 errors listed below, and try again.
 
 
-File "game/script.rpy", line 283: invalid syntax
-    $ renpy.notify (u"Возможно, персонаж говорит неправду, что влечёт за собой последствия. Делайте выбор осторожно.")
-     ^
-    
+File "game/script-day2.rpy", line 4973: expected statement.
+    mom: "[name], дорогой, как у тебя сегодня день?"
+       ^
+
+File "game/script-day2.rpy", line 4980: expected statement.
+    mom: "Конечно, до вечера, малыш."
+       ^
 
 Ren'Py Version: Ren'Py 7.3.5.606
-Mon Oct 19 23:33:36 2020
+Mon Dec 07 20:32:20 2020
