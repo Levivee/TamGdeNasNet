@@ -1,3 +1,52 @@
+label rps:
+    $ win = 0
+    $ lose = 0
+    $ rps_beats = [("камень", "ножницы"), ("ножницы", "бумага"), ("бумага", "камень")]
+    if win > 1:
+        show a407 with dissolve
+        al "Да блин!"
+    if lose > 1:
+        show a419 with dissolve
+        al "Опа! Ха!"
+    else:
+        pass
+    menu:
+        "Камень!":
+            $ rps_player = "камень"
+        "Бумага!":
+            $ rps_player = "бумага"
+        "Ножницы!":
+            $ rps_player = "ножницы"
+
+    $ rps_npc = renpy.random.choice(["камень", "бумага", "ножницы"])
+
+    al "Я выбрал %(rps_npc)!"
+
+    if (rps_player, rps_npc) in rps_beats:
+        $ win +=1
+        show a404 with dissolve
+        al "Рано радуешься, просто повезло."
+        me "Да-да, конечно."
+        hide a404 with dissolve
+        jump rps
+
+    elif (rps_npc, rps_player) in rps_beats:
+        $ lose += 1
+        show a410 with dissolve
+        al "Ха! Съел?"
+        me "Я еще отыграюсь."
+        hide a410 with dissolve
+        jump rps
+
+    else:
+        show a410 with dissolve
+        al "У-у-у, ситуация накаляется!"
+        hide a404 with dissolve
+        jump rps
+
+
+
+
 label day_mon:
     $ notereason = 0 #целое число, последняя записка//
     $ notefind = 0 #целое число, последняя записка//
@@ -751,7 +800,9 @@ label day_mon:
             hide m204
             show m237
             al "Ага, давай."
-
+            hide m237 with dissolve
+            hide a414 with dissolve
+            call rps
 
 
 
