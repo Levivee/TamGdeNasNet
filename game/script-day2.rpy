@@ -1856,6 +1856,8 @@ label day2:
                     hide a210 with moveoutleft
                     "Махнув мне рукой, Алан, насвистывая, пошел в сторону буфета."
                     "Я подождал, пока он уйдет, и тихонько направился в учительскую."
+                    stop music
+                    play music "audio/no_tresspassing.ogg"
                     "Идеальнее времени не придумаешь. {w}Никого из учителей нет, все на отдыхе, миссис Сантана и Моника еще на репетиции."
                     "И все равно сердце колотилось, как бешеное."
                     "Прислушиваясь к каждому шороху, я прокрался по коридору и взялся за ручку двери учительской."
@@ -1874,17 +1876,21 @@ label day2:
                         "Может… может, его тоже взять с собой?"
                         menu:
                             "Взять аттестат Саймона":
+                                $ renpy.fix_rollback()
                                 # ВЫБОР ДЕЙСТВИЯ (с аттестатом саймона)
                                 # ДЕЙСТВИЕ 1/2: взять аттестат Саймона
                                 $ attS = True
                                 "А, одним больше, одним меньше."
                                 "Я сунул и его тоже в рюкзак, вернул остальные аттестаты на место и тихонько вышел из учительской, заперев дверь."
                             "Побыстрее уйти":
+                                $ renpy.fix_rollback()
                                 "Что за глупые мысли, надо сматываться, и поскорее, пока никто не пришел."
                                 "Я вернул остальные аттестаты на место и тихонько вышел из учительской, заперев за собой дверь."
                                 #завершение выбора действия (с аттестатом саймона)
                         "Вот так, как будто меня и не было. {w}Думаю, никто ничего не заметит, можно идти к Алану."
                         scene stolovaya with dissolve
+                        stop music
+                        play music "audio/Senaru.mp3"
                         "Тот уже купил в буфете две бутылки лимонада и допивал свою, отсалютировав мне, когда я подошел."
                         al "Ну ты долго! Я уж думал твою бутылку выпить."
                         show a210
@@ -1900,6 +1906,8 @@ label day2:
                         "Что ж, похоже, не судьба. Придется все-таки менять билеты, что поделать."
                         "Вздохнув, я пошел обратно к Алану."
                         scene stolovaya with dissolve
+                        stop music
+                        play music "audio/Senaru.mp3"
                         "Тот уже купил в буфете две бутылки лимонада и отсалютировал мне своей, когда я подошел."
                         show a209
                         al "Ты быстро! Все нормально?"
@@ -1921,6 +1929,8 @@ label day2:
                     al "Пошли тогда, буфет вроде еще работает."
                     hide a214 with dissolve
                     scene stolovaya with dissolve
+                    stop music
+                    play music "audio/Senaru.mp3"
                     "Буфет и правда работал."
                     "Мы взяли себе по бутылке лимонада, а я еще решил прихватить пачку сухариков, чтобы было повеселее."
                     #завершение выбора действия (идем ли в учительскую)
@@ -2026,6 +2036,8 @@ label day2:
                 hide a224
                 show a225
                 al "Если честно, я бы все отдал, лишь бы уехать отсюда."
+                stop music
+                play music "audio/raindrops.ogg"
                 "Я от неожиданности чуть не подавился лимонадом."
                 hide a225
                 show a227
@@ -2124,10 +2136,12 @@ label day2:
                 al "То есть серьезно? А ку…"
                 hide a229
                 show a220
-                show s008
+                show s008 at right with dissolve
+                stop music
+                play music "audio/4doik.ogg"
                 sar "Вот ты где!"
                 hide s008
-                show s011
+                show s011 at right with dissolve
                 sar "Вы куда делись с репетиции? Совсем с дуба рухнули?"
                 hide a220
                 show a202
@@ -2135,48 +2149,48 @@ label day2:
                 hide a202
                 show a203
                 hide s011
-                show s013
+                show s013 at right with dissolve
                 sar "Какой еще разговор!"
                 hide s013
-                show s019
+                show s019 at right with dissolve
                 sar "[name], мы же договорились после репетиции пойти пообедать и в кино!"
                 me "Ээ… д-да, а что, репетиция уже закончилась?"
                 hide s019
-                show s020
+                show s020 at right with dissolve
                 sar "Давно уже!"
                 hide a203
                 show a204
                 hide s020
-                show s011
+                show s011 at right with dissolve
                 sar "И ты бы об этом знал, если бы самым наглым образом не слинял с нее!"
                 me "Извини, я как-то потерял счет времени."
                 hide a204
                 show a202
                 hide s011
-                show s013
+                show s013 at right with dissolve
                 al "Подожди, ты не можешь вот так взять и уйти после того, что ты мне сказал!"
                 hide a202
                 show a212
                 hide s013
-                show s014
+                show s014 at right with dissolve
                 sar "А что, [name], что ты ему сказал?"
                 hide a212
                 show a216
                 hide s014
-                show s015
+                show s015 at right with dissolve
                 me "Ээм, неважно, Алан, давай попозже созвонимся?"
                 hide a216
                 show a204
                 al "Да у меня даже номера твоего нет!"
                 hide s015
-                show s015
+                show s015 at right with dissolve
                 me "Ладно, сейчас. Сара, подожди еще буквально минутку, ладно?"
                 hide s015
-                show s020
+                show s020 at right with dissolve
                 sar "Так уж и быть."
                 "Я порылся в рюкзаке, достал ручку и написал свой номер телефона прямо на чеке из-под сухариков."
                 hide s020
-                show s011
+                show s011 at right with dissolve
                 hide a204
                 show a208
                 me "Вот, держи."
@@ -2184,12 +2198,14 @@ label day2:
                 show a213
                 al "Ага, спасибо, я позвоню потом! Мы не договорили, запомни!"
                 hide s011
-                show s020
+                show s020 at right with dissolve
                 me "Да-да, хорошо, обязательно."
                 hide s020 with dissolve
                 hide a213 with dissolve
                 scene sch_a with dissolve
                 #локация: вход в школу
+                stop music
+                play music "audio/Ainokotoba.mp3"
                 show s010 with dissolve
                 sar "Ух, ну тут и холодрыга!"
                 hide s010
@@ -2250,6 +2266,8 @@ label day2:
                 hide a200 with dissolve
                 scene sch_a with dissolve
                 #локация: вход в школу
+                stop music
+                play music "audio/Ainokotoba.mp3"
                 "Сара ждала меня под козырьком школы, смешно приплясывая на месте."
                 sar "Вот ты где! Наконец-то!"
                 show s002 with dissolve
@@ -3816,12 +3834,14 @@ label day2:
             show s029
             sar "Без твоих рассказов…"
             hide s029
+            stop music fadeout (2)
             show s021
             sar "…"
             hide s021
             show s023
             sar "…"
             hide s023
+            play music "audio/ZettaiZetsumei.mp3"
             show s035
             sar "В общем, я решила, что я… {w}я поеду с тобой, [name]."
             hide s035
