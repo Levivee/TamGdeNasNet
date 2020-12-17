@@ -305,6 +305,15 @@ init:
     image kino ="images/bg/kino.jpg"
     image park ="images/bg/park.jpg"
     image park_n ="images/bg/park_n.jpg"
+    image park2 ="images/bg/park2.jpg"
+    image park2_a ="images/bg/park2_a.jpg"
+    image park3 ="images/bg/park3.jpg"
+    image park3_a ="images/bg/park3_a.jpg"
+    image wheel_a ="images/bg/wheel_a.jpg"
+    image wheel_all ="images/bg/wheel_all.jpg"
+    image city_road ="images/bg/city_road.jpg"
+    image rollercoaster ="images/bg/rollercoaster.jpg"
+
 
 
 
