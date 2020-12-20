@@ -54,6 +54,9 @@ image intro:
     0.5
     
 label splashscreen:
+    if quick_end:
+        show poem_end
+        $ renpy.quit()
 
     python:
         process_list = []
@@ -138,6 +141,7 @@ label splashscreen:
 
     if quick_end:
         show poem_end
+        $ renpy.pause (99)
         $ renpy.quit()
 
     if s_kill_early:

@@ -1902,8 +1902,7 @@ label true_ending:
     bul "И..."
     bul "Мы все любим тебя."
     stop music fadeout 2.0
-    scene black
-    with Dissolve(2.0)
+    scene black with Dissolve(2.0)
     $ get_achievement("sec", trans=achievement_transform)
     call screen dialog("Прости... Что нам нужно прощаться...", ok_action=Return())
     call screen dialog("Все же здесь нет счастья для всех сразу", ok_action=Return())

@@ -46,6 +46,586 @@ label rps:
         hide a404 with dissolve
         jump rps
 
+screen battletime:
+    timer 0.1 repeat True action If(time > 0, true=SetVariable('time', time - 0.02), false = [Hide('battletime'), Jump(timerjump)])    #Первый тайм - пауза между снятием времени, Второй тайм - минус времени     #####     Jump(timerjump)]) - командой этой мы обозначаем каким кодом мы будем вызывать переход если не успеет по времени персонаж сделать выбор
+
+    bar:
+     style "timebar"
+     value time
+     xalign 0.5 yalign 0.2# расположение бара, 0.5 посередине ширины экрана, 0.2 сверху но не на самом краю
+
+
+
+screen my_scr:
+
+    timer 1.0 action If(my_timer>1, [SetVariable("my_timer", my_timer-1), Return("smth")], Return("loser")) repeat True
+
+    text u"время - [my_timer] сек." size 30 color "ff0" xalign 0.0 yalign 0.1
+    text u"баллы - [score]" size 40 color "c00" xalign 0.5 yalign 0.1
+    #text u"повторных нажатий - [counter]" size 20 color "00c"xalign 1.0 yalign 0.1
+
+
+    key "q" action Return("q")
+    key "w" action Return("w")
+    key "e" action Return("e")
+    key "r" action Return("r")
+    key "h" action Return("h")
+    key "d" action Return("d")
+    key "v" action Return("v")
+    key "k" action Return("k")
+    key "n" action Return("n")
+    key "a" action Return("a")
+    key "g" action Return("g")
+    key "b" action Return("b")
+    key "o" action Return("o")
+    key "j" action Return("j")
+    key "l" action Return("l")
+
+    key "Q" action Return("Q")
+    key "W" action Return("W")
+    key "E" action Return("E")
+    key "R" action Return("R")
+    key "H" action Return("H")
+    key "D" action Return("D")
+    key "V" action Return("V")
+    key "K" action Return("K")
+    key "N" action Return("N")
+    key "A" action Return("A")
+    key "G" action Return("G")
+    key "B" action Return("B")
+    key "O" action Return("O")
+    key "J" action Return("J")
+    key "L" action Return("L")
+
+    key "й" action Return(u"й")
+    key "ц" action Return(u"ц")
+    key "у" action Return(u"у")
+    key "к" action Return(u"к")
+    key "р" action Return(u"р")
+    key "в" action Return(u"в")
+    key "м" action Return(u"м")
+    key "л" action Return(u"л")
+    key "т" action Return(u"т")
+    key "ф" action Return(u"ф")
+    key "п" action Return(u"п")
+    key "и" action Return(u"и")
+    key "щ" action Return(u"щ")
+    key "о" action Return(u"о")
+    key "д" action Return(u"д")
+
+    key "Й" action Return(u"Й")
+    key "Ц" action Return(u"Ц")
+    key "У" action Return(u"У")
+    key "К" action Return(u"К")
+    key "Р" action Return(u"Р")
+    key "В" action Return(u"В")
+    key "М" action Return(u"М")
+    key "Л" action Return(u"Л")
+    key "Т" action Return(u"Т")
+    key "Ф" action Return(u"Ф")
+    key "П" action Return(u"П")
+    key "И" action Return(u"И")
+    key "Щ" action Return(u"Щ")
+    key "О" action Return(u"О")
+    key "Д" action Return(u"Д")
+
+transform my_transform:
+    on show:
+        xalign 0.5 yalign 0.5
+        alpha 0.0
+        parallel:
+            linear 0.2 zoom 10.0
+        parallel:
+            linear 0.1 alpha 1.0
+            linear 0.1 alpha 0.0
+
+
+
+label balbes:     ###  Метка куда мы перейдем если не успеем по времени
+    hide screen battletime
+    hide screen timeout_event2  ### закрываем скрипт наших надписей, что бы они исчезли
+    pause 0.1
+    "Яне успеваю нажимать на кнопки вовремя..."
+    return
+
+
+label demomo:
+    play sound "audio/SAVE_succes.wav"
+    scene black
+    $ renpy.pause (0.1)
+    play sound "audio/mainmenu_select.wav"
+    $ renpy.pause (0.1)
+    play sound "audio/mainmenu_select.wav"
+    $ renpy.pause (0.1)
+    play sound "audio/mainmenu_select.wav"
+    $ renpy.pause (0.1)
+    play sound "audio/SAVE_succes.wav"
+    scene end1
+    $ renpy.pause (8.0, hard=True)
+    menu fight:
+        "Битва":
+            scene end2 with dissolve
+            $ renpy.pause (3.0)
+            scene end3
+            $ renpy.pause (3.0)
+            "* Q *"
+            $ time = 1
+            $ timerjump = "balbes"
+            $ my_timer = 10
+            show screen my_scr
+            label loop_one:
+                $ res = ui.interact()
+                if res == "loser":
+                    hide screen my_scr
+                    scene black with dissolve
+                    scene room_m with dissolve
+                    show s027 with dissolve
+                    stop music
+                    $ renpy.pause(0.1, hard=True)
+                    me "Черт, я проиграл"
+                    sar "Ахах, ну ты даешь, давай еще раз!"
+                    menu:
+                        "Да я сейчас тебя обыграю!":
+                            sar "Ну давай, попробуй!"
+                        "Давай закончим":
+                            sar "Нет уж, я не дам тебе уйти!"
+                    jump demomo
+
+                if res not in u"qй":
+                    $ renpy.pause(0.1, hard=True)
+                    jump loop_one
+
+                hide text
+                show text("[res]") at my_transform
+
+                if res == prev_hit:
+                   $ counter += 1
+                #else:
+                    #$ prev_hit = res
+                    #$ counter += 1
+
+                if counter < 3:
+                    $ score += (3 - counter)
+                $ renpy.pause(0.1, hard=True)
+
+                if score > 130:
+                    hide screen my_scr
+                    $ renpy.pause(0.1, hard=True)
+                    $ renpy.pause(0.0, hard=True)
+                    $ renpy.pause(0.0, hard=True)
+                    jump far_away
+                else:
+                    jump loop_one
+
+    label far_away:
+        hide screen battletime
+        hide screen timeout_event2
+        scene end5
+        $ renpy.pause (1.5)
+        scene end6
+        "* W *"
+        $ time = 1
+        $ timerjump = "balbes"
+        $ my_timer = 10
+        show screen my_scr
+        label loop_two:
+            $ res = ui.interact()
+            if res == "loser":
+                hide screen my_scr
+                scene black with dissolve
+                scene room_m with dissolve
+                show s027 with dissolve
+                stop music
+                $ renpy.pause(0.1, hard=True)
+                me "Черт, я проиграл"
+                sar "Ахах, ну ты даешь, давай еще раз!"
+                menu:
+                    "Да я сейчас тебя обыграю!":
+                        sar "Ну давай, попробуй!"
+                    "Давай закончим":
+                        sar "Нет уж, я не дам тебе уйти!"
+                jump demomo
+
+            if res not in u"wц":
+                $ renpy.pause(0.1, hard=True)
+                jump loop_two
+
+            hide text
+            show text("[res]") at my_transform
+
+            if res == prev_hit:
+                $ counter += 1
+                #else:
+                    #$ prev_hit = res
+                    #$ counter += 1
+
+            if counter < 140:
+                $ score += (3 - counter)
+            $ renpy.pause(0.1, hard=True)
+
+            if score > 260:
+                hide screen my_scr
+                $ renpy.pause(0.1, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                jump faar_away
+
+            jump loop_two
+
+    label faar_away:
+        hide screen battletime
+        hide screen timeout_event2
+        scene end7
+        $ renpy.pause (1.5)
+        play sound "sounds/soul_battle_flash.wav"
+        scene black
+        $ renpy.pause (0.1)
+        play sound "sounds/soul_battle_flash.wav"
+        scene end8
+        "* E *"
+        $ time = 1
+        $ timerjump = "balbes"
+        $ my_timer = 10
+        show screen my_scr
+        label loop_three:
+            $ res = ui.interact()
+            if res == "loser":
+                hide screen my_scr
+                scene black with dissolve
+                scene room_m with dissolve
+                show s027 with dissolve
+                stop music
+                $ renpy.pause(0.1, hard=True)
+                me "Черт, я проиграл"
+                sar "Ахах, ну ты даешь, давай еще раз!"
+                menu:
+                    "Да я сейчас тебя обыграю!":
+                        sar "Ну давай, попробуй!"
+                    "Давай закончим":
+                        sar "Нет уж, я не дам тебе уйти!"
+                jump demomo
+
+            if res not in u"eу":
+                $ renpy.pause(0.1, hard=True)
+                jump loop_three
+
+            hide text
+            show text("[res]") at my_transform
+
+            if res == prev_hit:
+                $ counter += 1
+            #else:
+                #$ prev_hit = res
+                #$ counter += 1
+
+            if counter < 150:
+                $ score += (3 - counter)
+                $ renpy.pause(0.1, hard=True)
+
+            if score > 390:
+                hide screen my_scr
+                $ renpy.pause(0.1, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                jump faaar_away
+
+            jump loop_three
+
+    label faaar_away:
+        hide screen battletime
+        hide screen timeout_event2
+        scene end9 with dissolve
+        $ renpy.pause (1.5)
+        scene wnd with dissolve
+        scene wnd1
+        scene black
+        $ renpy.pause (0.3)
+        scene wnd2
+        $ renpy.pause (0.01, hard=True)
+        scene wnd3
+        $ renpy.pause (0.01, hard=True)
+        scene wnd4
+        $ renpy.pause (0.01, hard=True)
+        scene wnd5
+        $ renpy.pause (0.01, hard=True)
+        scene wnd6
+        $ renpy.pause (0.01, hard=True)
+        play sound "sounds/monster_damage_hit.wav"
+        scene wnd7
+        with vpunch
+        $ renpy.pause (2.0, hard=True)
+        sar "Да ты совсем разучился играть!"
+        sar "Не поддавайся, соберись!"
+        "* R H *"
+        $ time = 1
+        $ timerjump = "balbes"
+        $ my_timer = 10
+        show screen my_scr
+        label loop_four:
+            $ res = ui.interact()
+            if res == "loser":
+                hide screen my_scr
+                scene black with dissolve
+                scene room_m with dissolve
+                show s027 with dissolve
+                stop music
+                $ renpy.pause(0.1, hard=True)
+                me "Черт, я проиграл"
+                sar "Ахах, ну ты даешь, давай еще раз!"
+                menu:
+                    "Да я сейчас тебя обыграю!":
+                        sar "Ну давай, попробуй!"
+                    "Давай закончим":
+                        sar "Нет уж, я не дам тебе уйти!"
+                jump demomo
+
+            if res not in u"rкhр":
+                $ renpy.pause(0.1, hard=True)
+                jump loop_four
+
+            hide text
+            show text("[res]") at my_transform
+
+            if res == prev_hit:
+                $ counter += 1
+            else:
+                $ prev_hit = res
+                $ counter -= 1
+
+            if counter < 160:
+                $ score += (3 - counter)
+                $ renpy.pause(0.1, hard=True)
+
+            if score > 480:
+                hide screen my_scr
+                $ renpy.pause(0.1, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                jump faaaar_away
+
+            jump loop_four
+
+    label faaaar_away:
+        hide screen battletime
+        hide screen timeout_event2
+        play sound "sounds/soul_battle_flash.wav"
+        scene black with dissolve
+        $ renpy.pause (0.1, hard=True)
+        play sound "sounds/soul_battle_flash.wav"
+        $ renpy.pause (0.1)
+        scene x9 with dissolve
+        "* D L K *"
+        $ time = 1
+        $ timerjump = "balbes"
+        $ my_timer = 10
+        show screen my_scr
+        label loop_five:
+            $ res = ui.interact()
+            if res == "loser":
+                hide screen my_scr
+                scene black with dissolve
+                scene room_m with dissolve
+                show s027 with dissolve
+                stop music
+                $ renpy.pause(0.1, hard=True)
+                me "Черт, я проиграл"
+                sar "Ахах, ну ты даешь, давай еще раз!"
+                menu:
+                    "Да я сейчас тебя обыграю!":
+                        sar "Ну давай, попробуй!"
+                    "Давай закончим":
+                        sar "Нет уж, я не дам тебе уйти!"
+                jump demomo
+
+            if res not in u"dвlдkл":
+                $ renpy.pause(0.1, hard=True)
+                jump loop_five
+
+            hide text
+            show text("[res]") at my_transform
+
+            if res == prev_hit:
+                $ counter += 1
+            else:
+                $ prev_hit = res
+                $ counter -= 1
+
+            if counter < 170:
+                $ score += (3 - counter)
+                $ renpy.pause(0.1, hard=True)
+
+            if score > 1100:
+                hide screen my_scr
+                $ renpy.pause(0.1, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                jump faaaar_aaway
+
+            jump loop_five
+
+    label faaaar_aaway:
+        hide screen battletime
+        hide screen timeout_event2
+        scene x12 with dissolve
+        $ renpy.pause (3.0, hard=True)
+        scene x13
+        $ renpy.pause (0.01, hard=True)
+        scene x14
+        $ renpy.pause (0.01, hard=True)
+        scene x15
+        $ renpy.pause (0.01, hard=True)
+        scene x16
+        $ renpy.pause (0.01, hard=True)
+        scene x17
+        $ renpy.pause (0.01, hard=True)
+        scene x18
+        $ renpy.pause (0.01, hard=True)
+        scene x19
+        $ renpy.pause (0.01, hard=True)
+        scene x20
+        $ renpy.pause (0.01, hard=True)
+        scene x21
+        $ renpy.pause (0.01, hard=True)
+        scene x22
+        $ renpy.pause (0.01, hard=True)
+        scene x23
+        $ renpy.pause (0.01, hard=True)
+        scene x24
+        $ renpy.pause (0.01, hard=True)
+        scene x25
+        $ renpy.pause (0.01, hard=True)
+        scene x26
+        $ renpy.pause (0.01, hard=True)
+        scene x27
+        $ renpy.pause (0.8, hard=True)
+        play sound "sounds/battle_item_equip.wav"
+        scene x28
+        $ renpy.pause (1.0, hard=True)
+        scene x29
+        "* N A *"
+        $ time = 1
+        $ timerjump = "balbes"
+        $ my_timer = 10
+        show screen my_scr
+        label loop_six:
+            $ res = ui.interact()
+            if res == "loser":
+                hide screen my_scr
+                scene black with dissolve
+                scene room_m with dissolve
+                show s027 with dissolve
+                stop music
+                $ renpy.pause(0.1, hard=True)
+                me "Черт, я проиграл"
+                sar "Ахах, ну ты даешь, давай еще раз!"
+                menu:
+                    "Да я сейчас тебя обыграю!":
+                        sar "Ну давай, попробуй!"
+                    "Давай закончим":
+                        sar "Нет уж, я не дам тебе уйти!"
+                jump demomo
+
+            if res not in u"nтaф":
+                $ renpy.pause(0.1, hard=True)
+                jump loop_six
+
+            hide text
+            show text("[res]") at my_transform
+
+            if res == prev_hit:
+                $ counter += 1
+            else:
+                $ prev_hit = res
+                $ counter -= 1
+
+            if counter < 180:
+                $ score += (3 - counter)
+                $ renpy.pause(0.1, hard=True)
+
+            if score > 1000:
+                hide screen my_scr
+                $ renpy.pause(0.1, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                jump faaaar_aaaway
+
+            jump loop_six
+
+    label faaaar_aaaway:
+        hide screen battletime
+        hide screen timeout_event2
+        scene x30
+        $ renpy.pause (0.5, hard=True)
+        play sound "sounds/monster_damage_hit.wav"
+        scene wnd7 with vpunch
+        $ renpy.pause (0.5, hard=True)
+        scene x36
+        $ renpy.pause (3.0, hard=True)
+        play sound "sounds/undyne_spear_appear.wav"
+        scene x37 with dissolve
+        $ renpy.pause (0.5, hard=True)
+        scene x38
+        $ renpy.pause (0.1, hard=True)
+
+        "* G B O *"
+        $ time = 1
+        $ timerjump = "balbes"
+        $ my_timer = 10
+        show screen my_scr
+        label loop_seven:
+            $ res = ui.interact()
+            if res == "loser":
+                hide screen my_scr
+                scene black with dissolve
+                scene room_m with dissolve
+                show s027 with dissolve
+                stop music
+                $ renpy.pause(0.1, hard=True)
+                me "Черт, я проиграл"
+                sar "Ахах, ну ты даешь, давай еще раз!"
+                menu:
+                    "Да я сейчас тебя обыграю!":
+                        sar "Ну давай, попробуй!"
+                    "Давай закончим":
+                        sar "Нет уж, я не дам тебе уйти!"
+                jump demomo
+
+            if res not in u"gпbиoщ":
+                $ renpy.pause(0.1, hard=True)
+                jump loop_seven
+
+            hide text
+            show text("[res]") at my_transform
+
+            if res == prev_hit:
+                $ counter += 1
+            else:
+                $ prev_hit = res
+                $ counter -= 1
+
+            if counter < 190:
+                $ score += (3 - counter)
+                $ renpy.pause(0.1, hard=True)
+
+            if score > 1600:
+                hide screen my_scr
+                $ renpy.pause(0.1, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                $ renpy.pause(0.0, hard=True)
+                jump faaaar_aaaaway
+
+            jump loop_seven
+
+    label faaaar_aaaaway:
+        hide screen battletime
+        hide screen timeout_event2
+        if gamesara == True:
+            jump aftergame
+        if gamealone == True:
+            jump aftergame1
+
+
+
 
 
 
@@ -1262,387 +1842,387 @@ label day_mon:
     else:
         $ monwheel = True
         if monwheel == True:
-        hide m242
-        show m218
-    me "Знаешь, что… давай на всякий случай пойдем в другую сторону?"
-    hide m218
-    show m212
-    mon "Согласна."
-    hide m212 with dissolve
-    "Я кивнул и повел ее в другую сторону парка, ненавязчиво приобняв за талию."
-    "Кажется, она не возражала."
-    "Боже, неужели это и правда свидание?.."
-    scene park with dissolve
-    show m219 with dissolve
-    me "Так… на чем мы остановились?"
-    hide m219
-    show m214
-    mon "Да. Точно."
-    hide m214
-    show m227
-    mon "…"
-    hide m227
-    show m228
-    mon "…"
-    hide m228
-    show m229
-    mon "Блин. Это, наверное, глупо…"
-    hide m229
-    show m212
-    mon "Но мне теперь кажется, что этот урод может вернуться в любой момент."
-    me "Оу…"
-    hide m212
-    show m231
-    mon "Давай, может, куда-нибудь еще пойдем?"
-    hide m231
-    show m217
-    me "Например?"
-    hide m217
-    show m226
-    mon "Даже не знаю…"
-    "Я вздохнул и возвел глаза к небу. {w}И вдруг придумал."
-    hide m226
-    show m231
-    me "Слушай, может быть, на колесо обозрения?"
-    hide m231
-    show m218
-    mon "Оу."
-    hide m218
-    show m214
-    mon "Мне нравится."
-    me "Как раз на нем и продолжим?"
-    mon "Да. Очень…"
-    hide m214
-    show m207
-    mon "Очень романтично."
-    "Романтично?.. Романтично?!"
-    hide m207 with dissolve
-    scene park3_a with dissolve
-    #локация: можно еще сменить на какую-нибудь, но я хз, мб и не надо х)
-    "Идя за Моникой в сторону кассы, я, наверное, раз тридцать повторил про себя это слово с разными интонациями."
-    "В результате она не дала мне за себя заплатить, сказав, что нам и так ехать потом."
-    "Мда, очень романтично."
-    scene wheel_a with dissolve
-    #локация: колесо оборзения
-    "Я не катался на колесе обозрения, наверное, с начальной школы."
-    "Я уже и не помнил, как это красиво – когда весь город расстилается перед тобой, как на ладони."
-    "Моника взяла нам два круга. Видимо, действительно решила поговорить."
-    "Однако первую минуту мы просто молча стояли и смотрели на город."
-    "На этот раз я был тем, кто прервал тишину."
-    show m200 with dissolve
-    me "Так красиво."
-    hide m200
-    show m214
-    mon "Да. Очень."
-    hide m214
-    show m244
-    mon "Я так давно не каталась на колесе обозрения."
-    hide m244
-    show m247
-    me "Я тоже! Последний раз лет в восемь, наверное, катался."
-    hide m247
-    show m207
-    mon "Да, я где-то так же."
-    hide m207
-    show m201
-    mon "Хотя странно, это же так здорово. Ребенком не понимаешь всей этой красоты."
-    hide m201
-    show m219
-    mon "Даже как-то жаль, что я так давно не каталась."
-    me "Насколько я знаю, твои родители могут купить тебе персональное колесо обозрения."
-    hide m219
-    show m207
-    mon "Это будет уже не то!"
-    hide m207
-    show m214
-    mon "Ладно, на чем мы..?"
-    me "Кажется, ты была со мной не согласна."
-    hide m214
-    show m200
-    mon "Да… Кхм."
-    if reason1 == True:
-        mon "Я спросила тебя, почему ты уезжаешь, и ты сказал, что в маленьких городах нет ничего интересного."
-        me "Ну…"
-        hide m200
-        show m219
-        mon "Давай я скажу, ладно?"
-        hide m219
-        show m227
-        mon "Я хотела сказать, что да, я тебя понимаю."
-        me "Правда?"
-        hide m227
-        show m230
-        mon "Да, город действительно маленький, казалось бы, что с него взять."
-        hide m230
-        show m201
-        mon "Но я хочу сказать, что… в этом есть своя прелесть."
-        hide m201
-        show m252
-        mon "Да, ты можешь уехать в большой город. Да, там будет много возможностей."
-        hide m252
-        show m218
-        mon "Но что они тебе дадут?"
-        hide m218
-        show m229
-        mon "Что они изменят?"
-        hide m229
-        show m236
-        mon "Да, тебе будет чем гордиться."
-        mon "Ты не просто какой-то там жалкий продавец, а продавцом с большого города!"
-        hide m236
-        show m234
-        mon "Но чем это будет отличаться от продавца в маленьком городе?"
-        hide m234
-        show m231
-        me "Это не то…"
-        hide m231
-        show m230
-        mon "Ладно, допустим, не продавец!"
-        hide m230
-        show m201
-        mon "Ты ведь сдавал информатику? Допустим, ты пойдешь работать программистом."
-        hide m201
-        show m236
-        mon "Да, ты найдешь работу в более крупной фирме, ты будешь там впахивать и получать свои кровно заработанные."
-        hide m236
-        show m222
-        mon "Но что это тебе даст?"
-        hide m222
-        show m224
-        mon "Кроме того, что ты осчастливишь владельца этой фирмы."
-        hide m224
-        show m227
-        mon "Ничего не даст."
-        me "Не соглашусь, оно даст мне повыше зарплату."
-        hide m227
-        show m207
-        mon "Ну… да, тут не поспоришь."
-        hide m207
-        show m214
-        mon "Но я о другом."
-        hide m214
-        show m249
-        mon "В маленьком городе у тебя больше возможностей сделать что-то полезное."
-        hide m249
-        show m250
-        mon "Не просто сидеть и делать владельца фирмы богаче, а реально что-то делать, понимаешь?"
-        hide m250
-        show m229
-        mon "Мои родители пашут день и ночь, чтобы сделать жителей этого города счастливее."
-        hide m229
-        show m237
-        mon "Да, они могли бы уехать куда-нибудь и открыть любую коммерческую фирму."
-        hide m237
-        show m244
-        mon "Но они остаются здесь, потому что здесь они могут сделать что-то хорошее."
-        hide m244
-        show m247
-        mon "Они могут сделать жизнь здесь лучше."
-        hide m247
-    elif reason2 == True:
-        mon "Я спросила тебя, почему ты уезжаешь, и ты сказал, что из-за родителей."
-        me "Ну…"
-        hide m200
-        show m219
-        mon "Давай я скажу, ладно?"
-        hide m219
-        show m227
-        mon "Я хотела сказать, что да, я тебя понимаю."
-        me "Правда?"
-        hide m227
-        show m214
-        mon "Да, конечно."
-        hide m214
-        show m216
-        mon "Мои родители тоже давят на меня."
-        hide m216
-        show m226
-        mon "Иногда даже слишком…"
-        hide m226
-        show m207
-        mon "Да, я знаю, все думают, что мне так повезло, моя семья же так богата!"
-        hide m207
-        show m212
-        mon "Но это не значит, что у меня нет никаких проблем."
-        mon "Бывает, что отец на меня ругается, что-то запрещает, злится на меня."
-        mon "Я тоже на него злюсь."
-        hide m212
-        show m216
-        mon "Мама часто игнорирует меня, если ей что-то не понравилось."
-        hide m216
-        show m230
-        mon "Я ее тоже игнорирую, отец начинает злиться, все выливается в скандал…"
-        hide m230
-        show m237
-        mon "И виноватой чаще всего оказываюсь я."
-        hide m237
-        show m236
-        mon "Но знаешь…"
-        hide m236
-        show m250
-        mon "Потом, когда я перестаю на них злиться, я вспоминаю, как сильно они меня любят."
-        hide m250
-        show m249
-        mon "Пусть они ругали меня за плохие оценки…"
-        hide m249
-        show m253
-        me "Тебя ругали за плохие оценки?"
-        hide m253
-        show m207
-        mon "Конечно, и еще как!"
-        hide m207
-        show m214
-        mon "У папы вообще бзик какой-то по этому поводу."
-        hide m214
-        show m201
-        mon "Мама столько ему говорила, что я не обязана учиться идеально, но ему все равно."
-        hide m201
-        show m225
-        mon "Его дочь должна быть лучшей везде."
-        hide m225
-        show m229
-        mon "Но знаешь, даже когда я где-то ошибалась…"
-        hide m229
-        show m227
-        mon "Они всегда поддерживали меня."
-        hide m227
-        show m248
-        mon "Или когда я чего-то боялась, спрашивала совета, они могли прочитать мне целую лекцию…"
-        hide m248
-        show m207
-        mon "Но это была полезная лекция. То есть они правда хотели, чтобы я все поняла."
-        hide m207
-        show m222
-        mon "Конечно, у тебя могут быть и другие родители, я не знаю, но…"
-        hide m222
-        show m214
-        mon "Я уверена, они тоже тебя любят."
-        hide m214
-        show m253
-        mon "Как мои родители любят меня."
-        hide m253
-        show m251
-        mon "Да, это не всегда заметно, я знаю."
-        hide m251
-        show m248
-        mon "Мои вот родители работают сутками, чтобы сделать жителей города счастливее."
-        hide m248
-        show m243
-        mon "Сделать жизнь в городе лучше."
-        hide m243
-        show m247
-        mon "И я так безумно горжусь ими и всем, что они делают!"
-        hide m247
-        show m200
-        mon "Я просто обязана сделать все возможное, чтобы продолжить их дело!"
-        hide m200
-    elif reason3 == True:
-        mon "Я спросила тебя, почему ты уезжаешь, и ты сказал, что из-за моей семьи."
-        me "Ну я не…"
-        hide m200
-        show m219
-        mon "Давай я скажу, ладно?"
-        hide m219
-        show m227
-        mon "Я хотела сказать, что да, я тебя понимаю."
-        me "Правда?"
-        hide m227
-        show m214
-        mon "Да, конечно."
-        hide m214
-        show m224
-        mon "Думаешь, я не в курсе, какими нас считают?"
-        hide m224
-        show m224
-        mon "Фу-фу, Фишеры, везде суют свой нос, все куплено, ла-ла-ла!"
-        hide m224
-        show m207
-        mon "Да даже ты наверняка считал меня зазнайкой!"
-        hide m207
-        show m214
-        me "Да нет вроде…"
-        hide m214
-        show m210
-        mon "Шучу."
-        hide m210
-        show m227
-        mon "На самом деле все совсем не так."
-        hide m227
-        show m236
-        mon "Да, моя семья действительно очень влиятельна, по факту, мы контролируем весь город."
-        hide m236
-        show m234
-        mon "Но это не значит, что мы суем всех своих родственников на управляющие места."
-        hide m234
-        show m237
-        mon "Если кто-то безответственный идиот, то он безответственный идиот!"
-        hide m237
-        show m248
-        mon "У меня есть кузен, который считал, что ему все должны."
-        hide m248
-        show m201
-        mon "Он старше меня на года три или четыре…"
-        hide m201
-        show m210
-        mon "В общем, он в институте вообще ничего не делал и считал, что это норма."
-        hide m210
-        show m219
-        mon "Что его родители все сами сделают, запугают преподов, а его пристроят на сладкое местечко."
-        hide m219
-        show m225
-        mon "Как раз вон место главврача в одной из больниц освободилось, а почему бы сразу не туда?"
-        me "Да, я помню, столько разговоров было."
-        hide m225
-        show m253
-        mon "Ну ты помнишь, чем все закончилось?"
-        me "Да, кажется…"
-        hide m253
-        show m218
-        me "Вроде бы говорили, что вы испугались поднявшейся шумихи и отдали место кому-то нормальному."
-        hide m218
-        show m219
-        mon "Испугались шумихи, да-да."
-        hide m219
-        show m207
-        mon "Почему бы моим родителям не испугаться шумихи, это же так страшно."
-        hide m207
-        show m248
-        mon "Мой отец вообще озверел, когда узнал про кузена."
-        hide m248
-        show m225
-        mon "Он вылетел из института, как пробка."
-        me "Что, серьезно?"
-        hide m225
-        show m207
-        mon "Ну да, он же ничего там не делал."
-        hide m207
-        show m201
-        mon "Сейчас его мой дядя пытается перевоспитать, но как-то не очень получается."
-        hide m201
-        show m251
-        mon "Папа говорит, что надо просто денег лишить на пару лет, и сразу мозги появятся."
-        hide m251
-        show m248
-        mon "Но дядя слишком жалостливый."
-        hide m248
-        show m253
-        mon "Я это к тому, что мои родители не дураки."
-        hide m253
-        show m234
-        mon "Они действительно очень, очень много и усердно работают."
-        hide m234
-        show m229
-        mon "Я иногда могу не видеть их целыми сутками."
-        hide m229
-        show m231
-        mon "Но они это все делают вовсе не для того, чтобы вертеть всеми, как им хочется."
-        hide m231
-        show m244
-        mon "Они это делают, чтобы сделать жителей города счастливее."
-        hide m244
-        show m247
-        mon "Чтобы жизнь здесь стала лучше, понимаешь?"
-        hide m247
+            hide m242
+            show m218
+            me "Знаешь, что… давай на всякий случай пойдем в другую сторону?"
+            hide m218
+            show m212
+            mon "Согласна."
+            hide m212 with dissolve
+            "Я кивнул и повел ее в другую сторону парка, ненавязчиво приобняв за талию."
+            "Кажется, она не возражала."
+            "Боже, неужели это и правда свидание?.."
+            scene park with dissolve
+            show m219 with dissolve
+            me "Так… на чем мы остановились?"
+            hide m219
+            show m214
+            mon "Да. Точно."
+            hide m214
+            show m227
+            mon "…"
+            hide m227
+            show m228
+            mon "…"
+            hide m228
+            show m229
+            mon "Блин. Это, наверное, глупо…"
+            hide m229
+            show m212
+            mon "Но мне теперь кажется, что этот урод может вернуться в любой момент."
+            me "Оу…"
+            hide m212
+            show m231
+            mon "Давай, может, куда-нибудь еще пойдем?"
+            hide m231
+            show m217
+            me "Например?"
+            hide m217
+            show m226
+            mon "Даже не знаю…"
+            "Я вздохнул и возвел глаза к небу. {w}И вдруг придумал."
+            hide m226
+            show m231
+            me "Слушай, может быть, на колесо обозрения?"
+            hide m231
+            show m218
+            mon "Оу."
+            hide m218
+            show m214
+            mon "Мне нравится."
+            me "Как раз на нем и продолжим?"
+            mon "Да. Очень…"
+            hide m214
+            show m207
+            mon "Очень романтично."
+            "Романтично?.. Романтично?!"
+            hide m207 with dissolve
+            scene park3_a with dissolve
+            #локация: можно еще сменить на какую-нибудь, но я хз, мб и не надо х)
+            "Идя за Моникой в сторону кассы, я, наверное, раз тридцать повторил про себя это слово с разными интонациями."
+            "В результате она не дала мне за себя заплатить, сказав, что нам и так ехать потом."
+            "Мда, очень романтично."
+            scene wheel_a with dissolve
+            #локация: колесо оборзения
+            "Я не катался на колесе обозрения, наверное, с начальной школы."
+            "Я уже и не помнил, как это красиво – когда весь город расстилается перед тобой, как на ладони."
+            "Моника взяла нам два круга. Видимо, действительно решила поговорить."
+            "Однако первую минуту мы просто молча стояли и смотрели на город."
+            "На этот раз я был тем, кто прервал тишину."
+            show m200 with dissolve
+            me "Так красиво."
+            hide m200
+            show m214
+            mon "Да. Очень."
+            hide m214
+            show m244
+            mon "Я так давно не каталась на колесе обозрения."
+            hide m244
+            show m247
+            me "Я тоже! Последний раз лет в восемь, наверное, катался."
+            hide m247
+            show m207
+            mon "Да, я где-то так же."
+            hide m207
+            show m201
+            mon "Хотя странно, это же так здорово. Ребенком не понимаешь всей этой красоты."
+            hide m201
+            show m219
+            mon "Даже как-то жаль, что я так давно не каталась."
+            me "Насколько я знаю, твои родители могут купить тебе персональное колесо обозрения."
+            hide m219
+            show m207
+            mon "Это будет уже не то!"
+            hide m207
+            show m214
+            mon "Ладно, на чем мы..?"
+            me "Кажется, ты была со мной не согласна."
+            hide m214
+            show m200
+            mon "Да… Кхм."
+            if reason1 == True:
+                mon "Я спросила тебя, почему ты уезжаешь, и ты сказал, что в маленьких городах нет ничего интересного."
+                me "Ну…"
+                hide m200
+                show m219
+                mon "Давай я скажу, ладно?"
+                hide m219
+                show m227
+                mon "Я хотела сказать, что да, я тебя понимаю."
+                me "Правда?"
+                hide m227
+                show m230
+                mon "Да, город действительно маленький, казалось бы, что с него взять."
+                hide m230
+                show m201
+                mon "Но я хочу сказать, что… в этом есть своя прелесть."
+                hide m201
+                show m252
+                mon "Да, ты можешь уехать в большой город. Да, там будет много возможностей."
+                hide m252
+                show m218
+                mon "Но что они тебе дадут?"
+                hide m218
+                show m229
+                mon "Что они изменят?"
+                hide m229
+                show m236
+                mon "Да, тебе будет чем гордиться."
+                mon "Ты не просто какой-то там жалкий продавец, а продавцом с большого города!"
+                hide m236
+                show m234
+                mon "Но чем это будет отличаться от продавца в маленьком городе?"
+                hide m234
+                show m231
+                me "Это не то…"
+                hide m231
+                show m230
+                mon "Ладно, допустим, не продавец!"
+                hide m230
+                show m201
+                mon "Ты ведь сдавал информатику? Допустим, ты пойдешь работать программистом."
+                hide m201
+                show m236
+                mon "Да, ты найдешь работу в более крупной фирме, ты будешь там впахивать и получать свои кровно заработанные."
+                hide m236
+                show m222
+                mon "Но что это тебе даст?"
+                hide m222
+                show m224
+                mon "Кроме того, что ты осчастливишь владельца этой фирмы."
+                hide m224
+                show m227
+                mon "Ничего не даст."
+                me "Не соглашусь, оно даст мне повыше зарплату."
+                hide m227
+                show m207
+                mon "Ну… да, тут не поспоришь."
+                hide m207
+                show m214
+                mon "Но я о другом."
+                hide m214
+                show m249
+                mon "В маленьком городе у тебя больше возможностей сделать что-то полезное."
+                hide m249
+                show m250
+                mon "Не просто сидеть и делать владельца фирмы богаче, а реально что-то делать, понимаешь?"
+                hide m250
+                show m229
+                mon "Мои родители пашут день и ночь, чтобы сделать жителей этого города счастливее."
+                hide m229
+                show m237
+                mon "Да, они могли бы уехать куда-нибудь и открыть любую коммерческую фирму."
+                hide m237
+                show m244
+                mon "Но они остаются здесь, потому что здесь они могут сделать что-то хорошее."
+                hide m244
+                show m247
+                mon "Они могут сделать жизнь здесь лучше."
+                hide m247
+            elif reason2 == True:
+                mon "Я спросила тебя, почему ты уезжаешь, и ты сказал, что из-за родителей."
+                me "Ну…"
+                hide m200
+                show m219
+                mon "Давай я скажу, ладно?"
+                hide m219
+                show m227
+                mon "Я хотела сказать, что да, я тебя понимаю."
+                me "Правда?"
+                hide m227
+                show m214
+                mon "Да, конечно."
+                hide m214
+                show m216
+                mon "Мои родители тоже давят на меня."
+                hide m216
+                show m226
+                mon "Иногда даже слишком…"
+                hide m226
+                show m207
+                mon "Да, я знаю, все думают, что мне так повезло, моя семья же так богата!"
+                hide m207
+                show m212
+                mon "Но это не значит, что у меня нет никаких проблем."
+                mon "Бывает, что отец на меня ругается, что-то запрещает, злится на меня."
+                mon "Я тоже на него злюсь."
+                hide m212
+                show m216
+                mon "Мама часто игнорирует меня, если ей что-то не понравилось."
+                hide m216
+                show m230
+                mon "Я ее тоже игнорирую, отец начинает злиться, все выливается в скандал…"
+                hide m230
+                show m237
+                mon "И виноватой чаще всего оказываюсь я."
+                hide m237
+                show m236
+                mon "Но знаешь…"
+                hide m236
+                show m250
+                mon "Потом, когда я перестаю на них злиться, я вспоминаю, как сильно они меня любят."
+                hide m250
+                show m249
+                mon "Пусть они ругали меня за плохие оценки…"
+                hide m249
+                show m253
+                me "Тебя ругали за плохие оценки?"
+                hide m253
+                show m207
+                mon "Конечно, и еще как!"
+                hide m207
+                show m214
+                mon "У папы вообще бзик какой-то по этому поводу."
+                hide m214
+                show m201
+                mon "Мама столько ему говорила, что я не обязана учиться идеально, но ему все равно."
+                hide m201
+                show m225
+                mon "Его дочь должна быть лучшей везде."
+                hide m225
+                show m229
+                mon "Но знаешь, даже когда я где-то ошибалась…"
+                hide m229
+                show m227
+                mon "Они всегда поддерживали меня."
+                hide m227
+                show m248
+                mon "Или когда я чего-то боялась, спрашивала совета, они могли прочитать мне целую лекцию…"
+                hide m248
+                show m207
+                mon "Но это была полезная лекция. То есть они правда хотели, чтобы я все поняла."
+                hide m207
+                show m222
+                mon "Конечно, у тебя могут быть и другие родители, я не знаю, но…"
+                hide m222
+                show m214
+                mon "Я уверена, они тоже тебя любят."
+                hide m214
+                show m253
+                mon "Как мои родители любят меня."
+                hide m253
+                show m251
+                mon "Да, это не всегда заметно, я знаю."
+                hide m251
+                show m248
+                mon "Мои вот родители работают сутками, чтобы сделать жителей города счастливее."
+                hide m248
+                show m243
+                mon "Сделать жизнь в городе лучше."
+                hide m243
+                show m247
+                mon "И я так безумно горжусь ими и всем, что они делают!"
+                hide m247
+                show m200
+                mon "Я просто обязана сделать все возможное, чтобы продолжить их дело!"
+                hide m200
+            elif reason3 == True:
+                mon "Я спросила тебя, почему ты уезжаешь, и ты сказал, что из-за моей семьи."
+                me "Ну я не…"
+                hide m200
+                show m219
+                mon "Давай я скажу, ладно?"
+                hide m219
+                show m227
+                mon "Я хотела сказать, что да, я тебя понимаю."
+                me "Правда?"
+                hide m227
+                show m214
+                mon "Да, конечно."
+                hide m214
+                show m224
+                mon "Думаешь, я не в курсе, какими нас считают?"
+                hide m224
+                show m224
+                mon "Фу-фу, Фишеры, везде суют свой нос, все куплено, ла-ла-ла!"
+                hide m224
+                show m207
+                mon "Да даже ты наверняка считал меня зазнайкой!"
+                hide m207
+                show m214
+                me "Да нет вроде…"
+                hide m214
+                show m210
+                mon "Шучу."
+                hide m210
+                show m227
+                mon "На самом деле все совсем не так."
+                hide m227
+                show m236
+                mon "Да, моя семья действительно очень влиятельна, по факту, мы контролируем весь город."
+                hide m236
+                show m234
+                mon "Но это не значит, что мы суем всех своих родственников на управляющие места."
+                hide m234
+                show m237
+                mon "Если кто-то безответственный идиот, то он безответственный идиот!"
+                hide m237
+                show m248
+                mon "У меня есть кузен, который считал, что ему все должны."
+                hide m248
+                show m201
+                mon "Он старше меня на года три или четыре…"
+                hide m201
+                show m210
+                mon "В общем, он в институте вообще ничего не делал и считал, что это норма."
+                hide m210
+                show m219
+                mon "Что его родители все сами сделают, запугают преподов, а его пристроят на сладкое местечко."
+                hide m219
+                show m225
+                mon "Как раз вон место главврача в одной из больниц освободилось, а почему бы сразу не туда?"
+                me "Да, я помню, столько разговоров было."
+                hide m225
+                show m253
+                mon "Ну ты помнишь, чем все закончилось?"
+                me "Да, кажется…"
+                hide m253
+                show m218
+                me "Вроде бы говорили, что вы испугались поднявшейся шумихи и отдали место кому-то нормальному."
+                hide m218
+                show m219
+                mon "Испугались шумихи, да-да."
+                hide m219
+                show m207
+                mon "Почему бы моим родителям не испугаться шумихи, это же так страшно."
+                hide m207
+                show m248
+                mon "Мой отец вообще озверел, когда узнал про кузена."
+                hide m248
+                show m225
+                mon "Он вылетел из института, как пробка."
+                me "Что, серьезно?"
+                hide m225
+                show m207
+                mon "Ну да, он же ничего там не делал."
+                hide m207
+                show m201
+                mon "Сейчас его мой дядя пытается перевоспитать, но как-то не очень получается."
+                hide m201
+                show m251
+                mon "Папа говорит, что надо просто денег лишить на пару лет, и сразу мозги появятся."
+                hide m251
+                show m248
+                mon "Но дядя слишком жалостливый."
+                hide m248
+                show m253
+                mon "Я это к тому, что мои родители не дураки."
+                hide m253
+                show m234
+                mon "Они действительно очень, очень много и усердно работают."
+                hide m234
+                show m229
+                mon "Я иногда могу не видеть их целыми сутками."
+                hide m229
+                show m231
+                mon "Но они это все делают вовсе не для того, чтобы вертеть всеми, как им хочется."
+                hide m231
+                show m244
+                mon "Они это делают, чтобы сделать жителей города счастливее."
+                hide m244
+                show m247
+                mon "Чтобы жизнь здесь стала лучше, понимаешь?"
+                hide m247
 
     show m222
     mon "Посмотри, ведь все стало так по-другому!"
@@ -1763,6 +2343,7 @@ label day_mon:
     "Забавно, я никогда не думал, что она может так робко улыбаться…"
     menu:
         "Поцеловать":
+            $ renpy.fix_rollback()
             $ kiss = True
             "Еще не совсем понимая, что делаю, я медленно положил руку поверх ее ладони и слегка сжал ее."
             hide m255 with dissolve
@@ -1776,6 +2357,7 @@ label day_mon:
             scene wheel_all with dissolve
             "А колесо продолжало отсчитывать круг за кругом, словно ничего и не происходило."
         "Поблагодарить":
+            $ renpy.fix_rollback()
             me "Спасибо… {w} Правда, спасибо."
             hide m255
             show m254
@@ -1874,7 +2456,7 @@ label day_mon:
     "Но, наверное, это лучше, чем я бы осознал это уже в другом городе."
     "Лучше же..? {w}Аргх!"
     "Я уткнулся лицом в подушку и бессильно застонал."
-
+    jump day_mon2
 #КОНЕЦ ТРЕТЬЕГО ДНЯ
 
 label day_mon2:
@@ -1950,6 +2532,1769 @@ label day_mon2:
     "Аргх, как же это все так сложно… {w}Но…"
     "Что, если мы и правда с ней больше никогда не увидимся?"
     "Может, стоит все-таки пойти на репетицию?"
+    menu:
+        "Поехать на репетицию":
+            $ renpy.fix_rollback()
+            $ lastmeet = True
+            "Да. Да, определенно стоит."
+            "Ну что ж. Тогда надо вставать…"
+            scene sch_m with dissolve
+            #локация: школа
+            "Поскольку я все равно еще провалялся какое-то время, я пришел ближе к концу репетиции."
+            scene sportzal with dissolve
+            #локация: спортзал (либо очередной коридор спортзала)
+            "Заходить в спортзал я не стал, остался в коридоре и оттуда наблюдал за всеми."
+            "Да что уж за всеми… за Моникой."
+            "Ее явно опять доставал Алан, она злилась, пихала его локтем либо ругалась, пока миссис Сантана не видела."
+            "А когда во время сценки Моника говорила свои реплики, она вдруг заметила меня."
+            "Она осеклась, а затем так искренне улыбнулась, что я понял – я не зря приехал."
+            "… {w} После репетиции, когда все начали выходить, я встал так, чтобы меня не увидели."
+            "Моника вышла последней, и ее я тихонько окликнул, улыбнувшись."
+            me "Эй, я здесь."
+            if monwheel == True:
+                #ЕСЛИ monwheel = true, то
+                "Она оглянулась и прежде, чем я что-то успел сказать, обняла меня за шею."
+                "Ненадолго, но этого было достаточно, чтобы губы сами собой растянулись в улыбке."
+                show m031 with dissolve
+                mon "Привет…"
+                hide m031
+                show m010
+                mon "Что, выспался, соня?"
+                hide m010
+                show m019
+                me "Да, вроде того…"
+                me "Как прошла репетиция?"
+                hide m019
+                show m014
+                mon "Хорошо. Даже Алан на удивление вел себя прилично."
+                hide m014
+                show m006
+                mon "Ну, насколько это возможно."
+                hide m006
+                show m002
+                me "Надо же, интересно, почему."
+                hide m002
+                show m004
+                mon "Не знаю и знать не хочу."
+                hide m004
+                show m031
+                mon "Пойдем погуляем?"
+                me "В том же парке?"
+                hide m031
+                show m036
+                mon "Ой, думаешь? А если Алан?"
+                me "Я буду надеяться, что молния не бьет дважды в одно и то же место."
+                hide m036
+                show m007
+                mon "Аххах… Ну пойдем, рискнем."
+                hide m007
+                show m014
+                me "Идем."
+                hide m014 with dissolve
+                "Взяв Монику за руку, я повел ее в тот же парк."
+                scene park with dissolve
+                #локация: и снова парк
+                "К счастью, Алан так и не появился. {w}Хотя признаюсь честно, я начал немного параноить после вчерашнего."
+                "Погода была замечательная. Дул прохладный ветерок, светило солнце, где-то пели птицы."
+                "Мы с Моникой иногда обменивались ничего не значащими фразами, но в основном молчали, наслаждаясь прогулкой."
+                show m030 with dissolve
+                mon "Как же здорово сегодня на улице…"
+                me "Да… Теперь лето по-настоящему наступило."
+                hide m030
+                show m031
+                mon "Скоро можно будет купаться. Знаешь, что?"
+                me "Что?"
+                hide m031
+                show m032
+                mon "А в этих твоих больших городах чаще всего негде купаться."
+                hide m032
+                show m034
+                mon "Либо все настолько грязное, что лучше уж не купаться."
+                hide m034
+                show m029
+                mon "А у нас есть аж целых два чудесных оборудованных пляжа!"
+                me "Аргументный аргумент."
+                me "Даже не знаю, что тебе возразить."
+                hide m029
+                show m030
+                mon "А что ты мне возразишь, если я права?"
+                me "Действительно."
+                "Продолжая посмеиваться, я посмотрел на Монику."
+                "Солнце красиво переливалось в ее золотистых волосах."
+                "Она тоже улыбалась, хоть и немного самодовольно. Но как же ей это шло."
+                "Я осознал, что откровенно любуюсь, только когда она засмеялась."
+                hide m030
+                show m031
+                mon "Ну что ты так на меня пристально смотришь?"
+                me "Да просто…"
+                menu:
+                # ВЫБОР ДЕЙСТВИЯ (признаться или нет)
+                # ДЕЙСТВИЕ 1/2: признаться в чувствах
+                    "Признаться в чувствах":
+                        $ renpy.fix_rollback()
+                        me "Просто… знаешь…"
+                        hide m031
+                        show m001
+                        mon "Что?"
+                        hide m001
+                        show m000
+                        me "Я всю ночь столько про тебя думал… Мне кажется, я схожу с ума."
+                        hide m000
+                        show m018
+                        me "Но я не могу выкинуть тебя из головы, я думаю про тебя все время."
+                        hide m018
+                        show m010
+                        mon "О… Что, правда?"
+                        hide m010
+                        show m037
+                        me "Ну либо я действительно схожу с ума, причем самым извращенным способом."
+                        hide m037
+                        show m007
+                        mon "Аххах… Ну, в таком случае мы оба сумасшедшие."
+                        hide m007
+                        show m039
+                        mon "Я тоже никак не могу перестать про тебя думать."
+                        me "Правда?"
+                        hide m039
+                        show m035
+                        mon "Да…"
+                    "Промолчать":
+                # ДЕЙСТВИЕ 2/2: промолчать (признаться в любви или нет)
+                        $ renpy.fix_rollback()
+                        me "Просто… так. Просто смотрю."
+                        hide m031
+                        show m010
+                        mon "Я просто посмотреть?"
+                        me "Да-да, именно."
+                        hide m010
+                        show m030
+                        mon "Ясно все с тобой. {w}Кхм…"
+                        hide m030
+                        show m005
+                        mon "Ты знаешь, я… я всю ночь думала про вчерашний день."
+                        me "Да? Ты тоже?"
+                        hide m005
+                        show m038
+                        mon "Да, ты тоже? Мне кажется, что я схожу с ума."
+                        hide m038
+                        show m041
+                        mon "Но мне кажется, я не могу выкинуть тебя из головы."
+                        hide m041
+                        show m042
+                        me "Ты… прямо с языка сняла."
+                        hide m042
+                        show m007
+                        mon "Да?"
+                        hide m007
+                        show m031
+                        me "Да. Я тоже не могу, только про тебя и думаю."
+                        hide m031
+                        show m035
+                        mon "Правда?"
+                        me "Правда."
+                        mon "…"
+                        hide m035
+                        show m041
+                        mon "Я так рада, что ты все-таки приехал…"
+
+                #завершение выбора действия (признаться в любви или нет)
+                hide m035
+                hide m041
+                show m014
+                mon "И знаешь, я… я бы не стала спрашивать, но раз ты…"
+                hide m014
+                show m044
+                mon "Раз все так…"
+                mon "…"
+                hide m044
+                show m014
+                mon "Раз чувства взаимны, я все же спрошу."
+                hide m014
+                show m033
+                mon "Но я пойму, если ты откажешься."
+                me "Я слушаю?"
+                hide m033
+                show m022
+                mon "Я еще никогда ни с кем не чувствовала себя так… спокойно, как с тобой."
+                hide m022
+                show m024
+                mon "Даже вчера, когда я хотела прибить Алана на месте, благодаря тебе я как-то… не знаю."
+                hide m024
+                show m030
+                mon "Знала, что все в порядке."
+                hide m030
+                show m033
+                mon "Что да, Алан тот еще придурок, но твое присутствие меня очень поддерживало."
+                hide m033
+                show m016
+                mon "И я хотела узнать, может, ты…"
+                hide m016
+                show m044
+                mon "Может… {w}Может быть, ты мог бы дать второй шанс этому городу?.."
+                hide m044
+                show m017
+                mon "И мне."
+                me "Воу…"
+                hide m017
+                show m046
+                mon "Что скажешь?"
+                me "Ну я… м-м-м…"
+                menu:
+                    "Остаться с Моникой":
+                        # ВЫБОР ДЕЙСТВИЯ (остаться с моникой или нет)
+                        # ДЕЙСТВИЕ 1/2: остаться с моникой
+                        #меняем значение monearly = true и
+                        $ renpy.fix_rollback()
+                        $ monearly = True
+                        "Моника терпеливо ждала моего ответа."
+                        "Я помедлил, глядя на нее, затем взял ее руки в свои и коротко кивнул."
+                        me "Хорошо."
+                        hide m046
+                        show m045
+                        mon "Что..?"
+                        me "Я согласен. Я остаюсь."
+                        hide m045
+                        show m048
+                        me "Только нужно тогда успеть сдать билеты, может, успею…"
+                        hide m048
+                        show m039
+                        mon "Если что, я могу возместить тебе их сумму."
+                        me "Да ну тебя."
+                        hide m039
+                        show m004
+                        mon "Я не шучу."
+                        hide m004
+                        show m014
+                        mon "А… а ты не шутишь?"
+                        me "Нет, я не шучу."
+                        hide m014
+                        show m031
+                        mon "Ты правда остаешься?"
+                        me "Я правда остаюсь."
+                        hide m031
+                        show m035
+                        mon "Ты правда… ох, [name]!"
+                        hide m035 with dissolve
+                        "Моника с тихим визгом бросилась мне на шею. {w} Я обнял ее в ответ, крепко прижимая к себе."
+                        #локация: какой-нибудь просто пейзаж того же парка
+                        "Странное дело, но я тоже чувствовал себя гораздо спокойнее."
+                        "Как будто все было… правильно."
+                        "Мой мир перевернулся с ног на голову за последние несколько дней, но я чувствовал, что теперь все правильно."
+                        #локация: дорожка парка?
+                        "И когда мы наконец-то отстранились друг от друга и пошли дальше гулять по парку, держась за руки,"
+                        "я вдруг понял, что смотрю на мир немного-по другому."
+                        "И это тоже…"
+                        #локация: вид на город сверху
+                        scene city with dissolve
+                        "Это тоже было правильным."
+                        stop music
+                        play music "audio/determination.mp3"
+                        scene end with dissolve
+                        window hide(None)
+                        $ renpy.pause (5)
+                        return
+                        #КОНЕЦ ИГРЫ
+                    # ДЕЙСТВИЕ 2/2: все же уехать (остаться с моникой или нет)
+                    "Все же уехать":
+                        #меняем значение earrings = true и
+                        $ earrings = True
+                        $ renpy.fix_rollback()
+                        "Моника терпеливо ждала моего ответа."
+                        "Я помедлил, глядя на нее, затем взял ее руки в свои и покачал головой."
+                        hide m046
+                        show m045
+                        me "Прости."
+                        hide m045
+                        show m050
+                        me "Я очень долго планировал эту поездку, я не могу просто… взять и выбросить все это."
+                        hide m050
+                        show m051
+                        me "Мне будет очень, очень тебя не хватать."
+                        me "Ты даже не представляешь, насколько."
+                        hide m051
+                        show m052
+                        mon "Ничего… я все понимаю."
+                        hide m052
+                        show m053
+                        mon "Я ожидала такого ответа, так что не переживай."
+                        hide m053
+                        show m054
+                        me "Прости, правда. Мне очень жаль…"
+                        hide m054
+                        show m055
+                        me "И очень тяжело это говорить."
+                        hide m055
+                        show m027
+                        mon "… {w}…"
+                        hide m027
+                        show m030
+                        mon "Все в порядке, [name]."
+                        hide m030
+                        show m039
+                        mon "И раз ты все-таки уезжаешь… я хочу дать тебе кое-что с собой."
+                        "Моника покопалась в сумочке и достала небольшую коробочку."
+                        "Внутри лежала пара золотых сережек с крупными камнями."
+                        hide m039
+                        show m000
+                        mon "Это мои серьги, мне когда-то их подарили, но они очень тяжелые."
+                        hide m000
+                        show m014
+                        mon "Возьми их с собой."
+                        hide m014
+                        show m016
+                        mon "Если вдруг у тебя что-то пойдет не по твоему плану, или, не знаю…"
+                        hide m016
+                        show m019
+                        mon "Если вдруг так получится, что все плохо, и некуда деваться, пусть они тебе помогут."
+                        mon "Камни настоящие, так что их можно будет дорого продать."
+                        hide m019
+                        show m014
+                        mon "И возможно, тебе это пригодится однажды."
+                        me "Ого…"
+                        hide m014
+                        show m007
+                        mon "Не хочу каркать, конечно…"
+                        hide m007
+                        show m000
+                        me "Ты уверена? Они же явно очень дорогие."
+                        hide m000
+                        show m014
+                        mon "У меня еще есть, не переживай."
+                        hide m014
+                        show m032
+                        mon "Все-таки я же любимая дочка семьи Фишер."
+                        hide m032
+                        show m029
+                        me "Да… сложно забыть об этом."
+                        me "Спасибо. Надеюсь, они мне не пригодятся."
+                        me "Я бы хотел сохранить что-нибудь на память о тебе."
+                        hide m029
+                        show m031
+                        mon "Что это еще за сентиментальность, я никуда не деваюсь."
+                        mon "У тебя есть мой номер, будем созваниваться."
+                        hide m031
+                        show m030
+                        mon "Может, однажды приедешь в гости? Кто знает?"
+                        hide m030
+                        show m032
+                        mon "Может, вообще тебе не понравится, и ты вернешься."
+                        me "Спасибо за веру в меня."
+                        hide m032
+                        show m037
+                        mon "Это не вера в тебя, просто вдруг не понравится."
+                        hide m037
+                        show m033
+                        mon "Так что никаких глупостей про вещи на память."
+                        hide m033
+                        show m019
+                        mon "Это все хорошо, но если вдруг что-то случится, смело продавай их."
+                        mon "Ничего страшного не будет."
+                        "Помедлив, я взял коробочку с сережками. {w}Они и правда были увесистыми."
+                        "Я убрал коробочку в рюкзак и со вздохом обнял Монику за плечи."
+                        hide m019
+                        show m033
+                        me "Спасибо тебе еще раз. Ты такая чудесная."
+                        hide m033
+                        show m035
+                        mon "Да, я знаю. Пойдем дальше гулять?"
+                        me "Давай… пойдем."
+                        "Удивительно, но кто бы знал, как мне будет ее не хватать…"
+                        hide m035 with dissolve
+                        scene city_road with dissolve
+                        #локация: закат
+                        "Мы гуляли с Моникой до самого вечера. Я проводил ее до дома, и мы еще долго целовались у двери."
+                        "В результате нас спугнула ее домработница, и Монике пришлось уйти."
+                        #локация: дом (вечер)
+                        scene room_n with dissolve
+                        "Домой я пришел, как в тумане."
+                        "Неужели на этом все закончится. Неужели вот так все и закончится, не успев даже начаться…"
+                        "Наверное, сегодня был самый сложный выбор за последние несколько лет."
+                        "Второй день подряд отказаться от ужина не получилось, но как поел, я тоже не помнил."
+                        "Просто упал лицом в подушку и почти сразу заснул."
+                        #завершение выбора действия (остаться с моникой или нет)
+            else:
+                #ИНАЧЕ (monwheel = false), то
+                "Она оглянулась и широко улыбнулась мне."
+                show m001 with dissolve
+                mon "Привет, соня. Выспался?"
+                hide m001
+                show m000
+                me "Вроде того, да."
+                me "Спасибо, что отмазала меня от репетиции, кстати. Почему я не ходил?"
+                hide m000
+                show m034
+                mon "Потому что у тебя там что-то не так с костюмом на выпускной, и ты поехал искать новый, пока не поздно."
+                hide m034
+                show m037
+                me "Ого. Находчиво, даже и не придерешься."
+                hide m037
+                show m030
+                mon "Ну так."
+                hide m030
+                show m039
+                mon "…"
+                hide m039
+                show m014
+                mon "Я правда очень рада, что ты все-таки приехал. Я уже и не рассчитывала."
+                hide m014
+                show m032
+                mon "Не передумал уезжать?"
+                me "Эм, нет, конечно."
+                hide m032
+                show m007
+                mon "Ну, я так и думала."
+                hide m007
+                show m001
+                mon "В любом случае я рада, что могу попрощаться с тобой лично."
+                hide m001
+                show m000
+                me "Как-то ты это все слишком грустно повернула."
+                me "Слушай, мне все еще так стыдно за вчерашнее…"
+                hide m000
+                show m022
+                me "Может, еще раз сходим куда-нибудь погулять и продолжим вчерашний разговор?"
+                hide m022
+                show m023
+                me "Только не в этот пресловутый парк."
+                hide m023
+                show m025
+                mon "…А надо ли?"
+                me "Что надо ли?"
+                hide m025
+                show m033
+                mon "А надо ли продолжать вчерашний разговор?"
+                hide m033
+                show m034
+                mon "Это ведь уже не важно. Пойдем просто погуляем."
+                hide m034
+                show m007
+                mon "Погода просто чудесная."
+                hide m007
+                show m019
+                me "Ты уверена?"
+                me "Ты вчера так гнала Алана, чтобы успеть сказать мне что-то…"
+                hide m019
+                show m030
+                mon "Я думаю, уже поздно что-либо говорить, [name]."
+                hide m030
+                show m031
+                mon "Просто я желаю тебе хорошей жизни в новом городе."
+                me "Мы еще только гулять идем, а ты уже прощаешься?"
+                hide m031
+                show m010
+                mon "Ничего, потом еще раз скажу!.."
+                hide m010 with dissolve
+                #локация: дневное небо
+                scene sky with dissolve
+                "Она взяла меня под руку, и мы пошли гулять по городу."
+                "Потом в кино. {w}Потом опять в парк…"
+                scene city_road with dissolve
+                #локация: тот же закат
+                "Время пролетело так быстро, что никто из нас не успел понять этого."
+                "Когда я проводил Монику до дома, уже почти стемнело."
+                "А уж когда я пришел домой, было так поздно, что мама даже отругала меня немного за то, что заставил беспокоиться."
+                "Я очень плохо запомнил, что именно она мне говорила. {w}В голове было гулко и пусто."
+                "А на душе как будто скребла целая стая кошек."
+                "Вот же чертов Алан, что же Моника хотела мне сказать…"
+                "Я ведь пытался снова поговорить об этом, но она все время убегала от этой темы."
+                "А теперь и правда уже поздно что-либо делать…"
+                "Завтра утром поезд. Нужно было сегодня собрать вещи и написать записку родителям,"
+                "но у меня не осталось абсолютно никаких сил."
+                "Все, что мне удалось сделать – так это поставить будильник на завтра."
+                "Я отложил телефон подальше и заснул, едва коснувшись головой подушки."
+                scene black with dissolve
+        "Остаться дома":
+            "Нет, наверное, лучше и правда остаться дома."
+            "Заодно хорошенько выспаться, а то завтра так рано вставать…"
+            "Да и Моника сама сказала, чтобы мы провели время дома…"
+            "С этими мыслями я закрыл глаза и провалился обратно в сон."
+            scene black with dissolve
+            #локация: черный экран
+            if sara > 0:
+                "Мне удалось поспать несколько часов, прежде чем мне опять позвонили."
+                "На этот раз это была Сара."
+                show s012 with dissolve
+                sar "Привет! Ты что, проспал репетицию?"
+                hide s012
+                show s014
+                me "М-м… да, вроде того."
+                hide s014
+                show s026
+                sar "Хитрый какой! А я уже к тебе подхожу!"
+                hide s026
+                show s001
+                sar "У меня две коробки пиццы и время до самого вечера!"
+                hide s001
+                show s000
+                me "Ого, я смотрю, ты настроена решительно."
+                hide s000
+                show s059
+                sar "Ну конечно, с кем же еще мне удастся так хорошо наесться пиццы?"
+                hide s059
+                show s060
+                sar "Кстати, одну из них я взяла твою любимую, с креветками."
+                hide s060
+                show s061
+                sar "И еще напитков."
+                hide s061
+                show s047
+                sar "В общем, поднимай свою ленивую сам-знаешь-что и иди меня встречай!"
+                me "Оуф, ладно."
+                hide s047 with dissolve
+                "Повесив трубку, я сладко потянулся и неохотно встал с постели."
+                show home_hall with dissolve
+                #локация: прихожая
+                "Я успел и одеться, и умыться, и даже постель застелить, когда Сара наконец-то дошла до меня."
+                show s062 with dissolve
+                sar "Приве-е-ет, а вот и я!"
+                hide s047
+                show s027
+                sar "Держи пиццу и иди скорей сюда, я тебя обниму!"
+                hide s027
+                show s063
+                me "Ого, ты чего это?"
+                hide s063
+                show s005
+                sar "Я та-а-ак соскучилась!"
+                hide s005
+                show s065
+                sar "Слушай, я тут подумала, у тебя родители дома?"
+                me "Нет, они на работе, а что?"
+                hide s065
+                show s064
+                sar "Может, поиграем в тот файтинг, что ты купил весной?"
+                hide s064
+                show s012
+                sar "Мы так давно в него не играли, а я что-то про него столько думала сегодня."
+                hide s012
+                show s017
+                sar "Давай поиграем напоследок?"
+                me "Давай, почему бы и нет?"
+                hide s017
+                show s005
+                sar "А еще у меня сюрприз для тебя."
+                hide s005
+                show s006
+                me "Какой?"
+                hide s006
+                show s001
+                sar "Всему свое время, торопыга!"
+                hide s001
+                show s014
+                sar "Пошли скорее есть."
+                me "Признай, ты пришла сюда вовсе не ради меня."
+                hide s014
+                show s028
+                sar "Да блин, она так пахла всю дорогу, что это была просто пытка!"
+                hide s028
+                show s006
+                me "Да-да, конечно!"
+                hide s006 with dissolve
+                #локация: наша комната
+                scene room_m with dissolve
+                "Пицца закончилась на удивление быстро. {w}Хотя чего удивительного, здесь же Сара."
+                "Мы немного поиграли, посмотрели всякую чушь в соцсетях, поболтали ни о чем."
+                "Затем Сара притянула к себе сумку и порылась в ней."
+                show s017 with dissolve
+                sar "Знаешь, мне… мне даже как-то не верится, что завтра тебя уже не будет."
+                hide s017
+                show s021
+                sar "Может, мы никогда больше уже не соберемся вот так вдвоем."
+                me "Сара, ну только не начинай…"
+                hide s021
+                show s022
+                sar "Нет-нет, я ничего не говорю, ничего не начинаю."
+                hide s022
+                show s029
+                sar "Я просто, ну… я взяла несколько предметов из дома."
+                ## отсюда и до следующей метки – копировать для концовки сары ##
+                hide s029
+                show s030
+                sar "Хочу, чтобы ты взял что-нибудь с собой на память обо мне."
+                hide s030
+                show s031
+                sar "Это браслет дружбы, который я плела тебе в пятом классе, но ты не захотел его носить."
+                hide s031
+                show s032
+                sar "Ты сказал, что лучше он останется у меня."
+                me "Ого, ты хранила его все это время?"
+                hide s032
+                show s066
+                sar "Да, вот он."
+                hide s066
+                show s059
+                sar "А это наше фото с прогулки в конце мая, помнишь?"
+                hide s059
+                show s006
+                sar "Мы кормили голубей, а потом их гоняли."
+                hide s006
+                show s065
+                me "Да… оу, а действительно удачное фото."
+                hide s065
+                show s066
+                sar "Да, я долго выбирала к нему рамочку."
+                hide s066
+                show s001
+                sar "А это наше старое фото. Мы здесь совсем недавно познакомились."
+                hide s001
+                show s000
+                me "Ох, блин, вот это я тут…"
+                hide s000
+                show s004
+                sar "Как сказала бы мама – молодой кабанчик."
+                me "Ага, почему бы не взять с собой фото, где мои щеки почти загораживают шею?"
+                hide s004
+                show s005
+                sar "Ну перестань, она классная!"
+                hide s005
+                show s007
+                me "Ты-то? Ну еще бы, ты тут Сара-до-встречи-с-пиццей. {w}А я…"
+                hide s007
+                show s011
+                sar "Ну перестань!"
+                hide s011
+                show s030
+                sar "Так вот. {w}И, наконец…"
+                me "О боги, твой талисман на удачу."
+                hide s030
+                show s031
+                sar "Да-да, который я привезла с моря в первом классе."
+                hide s031
+                show s032
+                sar "Он никогда еще меня не подводил."
+                sar "С ним я дважды брала первое место на конкурсе танцев в старшей школе."
+                hide s032
+                show s057
+                me "Так что, можно сказать, ты читерила?"
+                hide s057
+                show s037
+                sar "Нет, ну я же не каждый раз им пользовалась, это же талисман, а не лампа джинна."
+                hide s037
+                show s008
+                me "Ты же сама сказала, что он на удачу."
+                hide s008
+                show s011
+                sar "Да, но… ой, что тебе объяснять, опять прикалываешься."
+                me "Не без этого, да."
+                hide s011
+                show s000
+                me "Но слушай, он ведь был тебе так дорог…"
+                hide s000
+                show s030
+                me "Да что там, все эти вещи тебе дороги, я не могу просто взять и забрать их у тебя."
+                hide s030
+                show s040
+                sar "Можешь. Я хочу, чтобы они у тебя были."
+                hide s040
+                show s057
+                me "Предлагаю компромисс."
+                me "Я беру что-то одно с собой, и остальное остается у тебя. {w}Идет?"
+                hide s057
+                show s059
+                sar "Хм… да, хорошо."
+                hide s059
+                show s000
+                sar "И что ты выберешь?"
+                me "Хм, дай-ка подумать…"
+                menu:
+                    # ВЫБОР ПРЕДМЕТА (сувенир на память)
+                    # ПРЕДМЕТ 1/4: браслет дружбы
+                    "Браслет дружбы":
+                        $ sBracelet = True
+                        me "Я возьму браслет. Все-таки ты плела его для меня."
+                        hide s000
+                        show s006
+                        sar "Я, кстати, очень старалась!"
+                        me "Да, я вижу. Правда, на руке носить все равно не буду, уж прости."
+                        hide s006
+                        show s000
+                        sar "Ничего, положишь в кошелек."
+                    # ПРЕДМЕТ 2/4: совместное фото этого года (сувенир на память)
+                    "Совместное фото этого года":
+                        $ sPhoto = True
+                        me "Я возьму наше фото, которое не так страшно будет на людях показать."
+                        hide s000
+                        show s022
+                        me "Так ты всегда будешь у меня на глазах."
+                        hide s022
+                        show s045
+                        sar "Ав, [name]…"
+                        hide s045
+                        show s040
+                        sar "Я буду присматривать за тобой."
+                    "Старый талисман Сары":
+                        # ПРЕДМЕТ 3/4: старый талисман сары (сувенир на память)
+                        $ sMascot = True
+                        me "Давай я возьму талисман. Удача мне точно не помешает."
+                        hide s000
+                        show s005
+                        sar "Он как раз заряжен, я давно им не пользовалась."
+                        hide s005
+                        show s014
+                        sar "Надеюсь, что он тебя приятно удивит."
+                        me "Я тоже. Спасибо тебе еще раз."
+                        hide s014
+                        show s040
+                        sar "Не за что, [name]."
+                    "Наше детское фото":
+                        # ПРЕДМЕТ 4/4: наше детское фото (сувенир на память)
+                        $ sPhotoOld = True
+                        me "Я возьму нашу детскую фотографию."
+                        hide s000
+                        show s022
+                        me "Чтобы она умерла вместе со мной, и никто ее не увидел больше."
+                        hide s022
+                        show s004
+                        sar "Да что такого, блин, ну все мы в детстве пухляши!"
+                        me "Не настолько же! Я не могу тебе позволить показывать ее всем подряд."
+                        hide s004
+                        show s067
+                        sar "Ой, ну ладно, ладно, убедил."
+                        #завершение выбора предмета (сувениры на память)
+
+                hide s067
+                hide s040
+                hide s000
+                show s001
+                sar "Что ж, тогда все остальные я убираю…"
+                hide s001
+                show s000
+                me "Да, убирай. Этот тогда остается мне."
+                ## вот до сюда можно копировать кусок для сары ##
+                "Сара кивнула, складывая все обратно в сумку, как вдруг в дверь позвонили."
+                hide s000
+                show s022
+                "Удивленно переглянувшись с подругой, я пошел открывать."
+                hide s022 with dissolve
+                scene home_hall with dissolve
+                #локация: прихожая
+                show m000 with dissolve
+                mon "Привет."
+                me "Моника? {w}Что ты здесь делаешь?"
+                hide m000
+                show m025
+                mon "Родители дома?"
+                me "Нет?!"
+                hide m025
+                show m007
+                mon "Чего ты кричишь, я зашла попрощаться."
+                hide m007
+                show m014
+                mon "Как ты? Вещи уже собрал?"
+                me "Да… нет, еще нет, ко мне…"
+                hide m014
+                show m018
+                me "Кхм. Ко мне Сара зашла тоже попрощаться."
+                hide m018
+                show m024
+                mon "Оу."
+                hide m024
+                show m058
+                mon "Что ж, привет ей, раз так."
+                hide m058
+                show m039
+                mon "А тебе удачной дороги. Надеюсь, у тебя все будет хорошо на новом месте."
+                hide m039
+                show m014
+                me "Спасибо, Моника, я тоже надеюсь."
+                me "И я… я правда рад был тебя видеть."
+                hide m014
+                show m024
+                mon "Я тебя тоже."
+                hide m024
+                show m031
+                mon "Что ж, не буду больше вам мешать, дай мне знать, как доедешь?"
+                me "Да, конечно, я позвоню тебе?"
+                hide m031
+                show m014
+                mon "Хорошо, я буду ждать."
+                if kiss == True:
+                    #ЕСЛИ kiss = true, то
+                    "Моника помедлила, затем коротко поцеловала меня в губы и обняла."
+                    "Я обнял ее в ответ, так крепко, как только мог."
+                    hide m014
+                    show m027
+                    mon "Прощай, [name]"
+                    hide m027
+                    show m017
+                    mon "Доброй дороги."
+                    hide m017
+                    show m050
+                    me "Прощай, Моника…"
+                    hide m050
+                    show m035
+                    "Она улыбнулась мне в последний раз и ушла."
+                    hide m035 with dissolve
+                    "А я стоял и снова смотрел ей вслед, как самый последний дурак на этом свете."
+                else:
+                    #ИНАЧЕ (kissa не было), то
+                    "Тепло улыбнувшись, словно ничего такого не было, Моника коротко чмокнула меня в щеку."
+                    hide m014
+                    show m039
+                    mon "Удачи тебе, [name]. Прощай."
+                    me "Прощай, Моника…"
+                    hide m039
+                    show m007
+                    mon "Жду звонка."
+                    hide m007 with dissolve
+                    "Подмигнув мне, не переставая улыбаться, Моника развернулась и ушла."
+                    "А я остался смотреть ей вслед, как влюбленный идиот."
+                    "Черт, почему же все должно было закончиться именно так…"
+
+                scene room_m with dissolve
+                #локация: наша комната
+                "Когда я вернулся в комнату, Сара сидела на диване и крутила в руках мой так называемый сувенир."
+                "В глазах ее стояли слезы."
+                show s068 with dissolve
+                me "Сара, ты что, плачешь?"
+                hide s022
+                show s017
+                sar "Н-нет…"
+                me "Ну Сара, что такое?"
+                hide s017
+                show s029
+                sar "Ни… ничего, просто…"
+                hide s029
+                show s030
+                sar "Ни… ничего, просто…"
+                hide s030
+                show s039
+                sar "Я все еще не могу поверить, что ты уезжаешь!!"
+                me "Сара, ну пора бы уже…"
+                hide s039
+                show s043
+                me "Ну… ну не плачь. Давай я еще пиццы закажу?"
+                hide s043
+                show s044
+                sar "Н-не надо."
+                hide s044
+                show s043
+                me "…О Господи, {w}с тобой все в порядке?"
+                hide s043
+                show s021
+                sar "Да, все в порядке."
+                hide s021
+                show s019
+                sar "Тебе и так придется прилично потратиться в дороге, не надо пиццы."
+                hide s019
+                show s035
+                sar "Просто доберись хорошо и звони мне, ладно?"
+                hide s035
+                show s040
+                me "Обязательно."
+                me "Сара, запомни – мы останемся друзьями, как и раньше."
+                hide s040
+                show s030
+                me "Просто я буду немного… дальше, чем через два квартала от тебя."
+                hide s030
+                show s068
+                me "Но обещаю, мы не прекратим общаться просто потому, что я уезжаю."
+                hide s068
+                show s030
+                sar "…"
+                hide s030
+                show s066
+                sar "Хорошо… спасибо, [name]."
+                hide s066
+                show s001
+                sar "А кто приходил, кстати?"
+                hide s001
+                show s000
+                me "А… да неважно."
+                hide s000
+                show s007
+                sar "А как тебе удалось уговорить Монику заменить тебя в сценке?"
+                hide s007
+                show s022
+                me "Да просто… помог ей с Аланом, ничего такого."
+                hide s022
+                show s023
+                me "Точно не хочешь пиццу?"
+                hide s023
+                show s060
+                sar "Да, я в порядке, все хорошо."
+                hide s060
+                show s061
+                sar "Ну что, еще разочек сыграем?"
+                menu:
+                    # ВЫБОР ДЕЙСТВИЯ (включить файтинг)
+                    "Играть с Сарой в файтинг":
+                        # ДЕЙСТВИЕ 1/2: сыграть с сарой в файтинг
+                        me "Да, конечно. Включай."
+                        $ gamesara = True
+                        hide s061
+                        show s064
+                        sar "Ура! Что ж, опозорим кое-кого еще раз!"
+                        label aftergame:
+                            scene room_m with dissolve
+                            show s011 with dissolve
+                            me "Кого ты тут собралась позорить, м-м?"
+                            hide s011
+                            show s028
+                            sar "Так нечестно!"
+                            me "Все честно."
+                            return
+                    "Давай лучше посмотрим фильм":
+                        # ДЕЙСТВИЕ 2/2: давай лучше посмотрим фильм (не надо файтинг)
+                        me "Знаешь, я что-то устал. Да и ехать завтра."
+                        me "Давай лучше фильм какой-нибудь посмотрим?"
+                        hide s061
+                        show s004
+                        sar "Ты просто боишься, что я тебя на лопатки уложу, да?"
+                        me "Очень."
+                        hide s004
+                        show s005
+                        sar "Разумное решение. О, а давай посмотрим тот фильм про космических пиратов?"
+                        hide s005
+                        show s000
+                        me "О, да, тоже про него недавно думал, давай."
+
+                    #завершение выбора действия (че по файтингу)
+
+                scene sky_n with dissolve
+                #локация: вечернее небо (можно закат)
+                "Вечер завершился мирным просмотром фильмов."
+                "Я проводил Сару до дома, по пути зашел в магазин купить чего-нибудь, потом поужинал с родителями…"
+                "Все как обычно. {w}Все так, словно ничего не происходило, обычный день."
+                "Вот только завтра ничего не будет уже как прежде…"
+            else:
+                #ИНАЧЕ (<0Са), то
+                #локация: черный экран
+                scene black with dissolve
+                "Я проспал, кажется, целую вечность."
+                "Наверное, я решил разом выспаться за все две недели экзаменов."
+                scene sky_n with dissolve
+                #локация: закатное небо
+                "Когда я проснулся, уже вечерело. Голова гудела, словно чугунная."
+                "Я вспомнил о нашей ссоре с Сарой, и взгляд сам собой упал на телефон."
+                "Может, позвонить ей?.. Не знаю, нравится ли мне идея, что я уеду, не попрощавшись."
+                "Она столько поддерживала меня, верила в меня, когда даже я не верил."
+                "Да, в последние дни я слишком нервничал из-за всей этой фигни со сценкой и Моникой."
+                "Так что, возможно, я и правда мог сильно обидеть ее…"
+                "Может, еще не поздно все исправить?"
+                menu:
+                    "Позвонить Саре":
+                        # ВЫБОР ДЕЙСТВИЯ (миримся или нет)
+                        # ДЕЙСТВИЕ 1/2: позвонить саре
+                        #то меняем значение очков сары на 0Са и
+                        $ sara = 0
+                        "Вздохнув, я взял телефон и после недолгого колебания набрал номер Сары."
+                        "Она так долго не брала трубку, что я думал, что уже не возьмет."
+                        "Но когда я хотел уже отключиться, она все же ответила."
+                        show s050 with dissolve
+                        sar "Что?"
+                        hide s050
+                        show s051
+                        me "Привет."
+                        hide s051
+                        show s011
+                        sar "Привет. Что тебе надо?"
+                        me "Слушай, я, эм…"
+                        me "Я хотел извиниться за вчерашнее."
+                        hide s011
+                        show s008
+                        me "Я знаю, ты злишься, и я тоже злюсь, если честно."
+                        hide s008
+                        show s070
+                        me "Но меня уже завтра тут не будет, и я… я не хочу уезжать вот так."
+                        hide s070
+                        show s071
+                        me "Даже не попрощавшись с тобой как следует."
+                        hide s071
+                        show s041
+                        sar "…"
+                        hide s041
+                        show s072
+                        sar "Да, я тоже. Я понимаю."
+                        me "Правда?"
+                        hide s072
+                        show s021
+                        me "Давай, может, помиримся потом, когда я уже уеду…"
+                        me "В смысле нормально помиримся."
+                        hide s021
+                        show s019
+                        me "А сейчас просто… сделаем вид, что ничего не было."
+                        hide s019
+                        show s070
+                        sar "Хорошо. Давай."
+                        hide s070
+                        show s023
+                        me "Тогда я… как и договаривались, завтра утром подойду к твоему дому?"
+                        hide s023
+                        show s030
+                        sar "Да, хорошо."
+                        me "Хорошо. Тогда до завтра?"
+                        hide s030
+                        show s040
+                        sar "До завтра, [name]."
+                        hide s040 with dissolve
+                        "Я повесил трубку и вздохнул."
+                        "Ну что ж, хотя бы так, уже неплохо. {w}Мне будет ее не хватать."
+                        "Возможно, даже очень. И ее, и Моники."
+                    "Забить на Сару":
+                        # ДЕЙСТВИЕ 2/2: забить на сару (не миримся с сарой)
+                        "Ой, да ладно, переживу как-нибудь."
+                        "Вон, лучше поиграю во что-нибудь. Или почитаю. Или и то, и то."
+
+                    #завершение выбора действия (миримся или нет)
+
+            "Вздохнув, я пошел раздобыть себе чего-нибудь поесть, но тихо, чтобы не спалили, что я только проснулся."
+            "А затем задумался, чем можно пока себя занять."
+            jump plays
+            label plays:
+                "Собственно, почему бы не поиграть немного. Когда еще будет возможность?"
+                menu:
+                    "Поиграть в файтинг":
+                        # ВЫБОР ДЕЙСТВИЯ (а не поиграть ли нам)
+                        # ДЕЙСТВИЕ 1/3: поиграть в файтинг
+                        #меняем значение game = true
+                        $ game = True
+                        $ gamealone = True
+                        "Ну, собственно, почему бы и нет."
+                        jump demomo
+
+                    # ДЕЙСТВИЕ 2/3: поиграть в тетрис (а не поиграть ли нам)
+                    "Поиграть в тетрис":
+                        #меняем значение game = true
+                        $ game = True
+                        "Ну, собственно, почему бы и нет."
+                        call tetris_start
+                        menu:
+                            "Поиграть еще":
+                                jump tetris_start
+                            "Выбрать другую":
+                                jump plays
+                            "Закончить играть":
+                                pass
+
+                    "Почитать лучше":
+                        # ДЕЙСТВИЕ 3/3: почитать лучше (а не поиграть ли нам)
+                        #меняем значение book = true
+                        $ book = True
+                        "Хотя… лучше пойду еще поваляюсь и почитаю чего-нибудь."
+                        #завершение выбора действия (а не поиграть ли нам)
+                if game == True:
+                    "В результате мы играли почти до ночи, отвлекаясь разве что на завтрак."
+                if book == True:
+                    "В результате мы читали до самой ночи, отвлекаясь разве что на завтрак."
+                "Мда, какой-то бесполезный вышел день, ну да что поделать."
+                "Надо как-то уложить себя теперь обратно спать, ведь завтра очень рано вставать."
+                "Ведь надо же еще и вещи собрать, вот черт, я совсем забыл про них…"
+                "Ладно, завтра соберу, это недолго."
+                "Соберу вещи, напишу родителям записку, а если что, посплю в поезде по дороге."
+                "А сейчас надо постараться заснуть."
+                "И желательно… не думать о той жизни, которая у меня могла бы быть, будь я чуть смелее…"
+
+            label aftergame1:
+                menu:
+                    "Поиграть еще":
+                        jump demomo
+                    "Выбрать другую":
+                        jump plays
+                    "Закончить играть":
+                        pass
+#завершение выбора действия (поехать ли на репетицию)
+#КОНЕЦ ЧЕТВЕРТОГО ДНЯ
+
+# row - field width
+# column - field height
+# speed - falling speed
+# tops - number of top places
+# level - level of difficulty
+# mode - presence of a bonus
+# impossible - without I tetromino
+# for_level - the number of lines for level-up
+
+# Highscore
+init -100:
+    if persistent.highscore is None:
+        $ persistent.highscore = []
+
+init python:
+
+    # Tetromino Symbols
+    symb_field = '·'
+    symb_red = 'R'
+    symb_cyan = 'C'
+    symb_blue = 'B'
+    symb_green = 'G'
+    symb_orange = 'O'
+    symb_purple = 'P'
+    symb_yellow = 'Y'
+    coloring = [symb_red, symb_cyan, symb_blue, symb_green, symb_orange, symb_purple, symb_yellow]
+
+    row = 10
+    column = 20
+
+    tops = 10
+    level = 1
+    for_level = 20
+    mode = False
+    impossible = False
+    speed = 0.4
+    speed_limit = 0.05
+    speed_acceleration = 0.03
+
+    # Main Class
+    class Tetris():
+        def __init__(self, speed=.5, level=1, mode=False, bonus=0):
+            self.field = ['·']*(row*column)
+            self.active = 0
+            self.rotate = 0
+            self.tetrominos = {1:[1,1, 1,1], 2:[1,1,1,1, 0,0,0,0], 3:[1,0,0, 1,1,1], 4:[0,0,1, 1,1,1], 5:[0,1,1, 1,1,0], 6:[1,1,0, 0,1,1], 7:[0,1,0, 1,1,1] }
+            self.next = self.get_tetromino()
+            self.tetromino = []
+            self.block = True
+            self.can_rotation = True
+            self.mode = mode
+            self.bonus = bonus
+            self.lines = 0
+            self.lines_counter = 0
+            self.point = 0
+            self.level = level
+            self.start_speed = speed
+            self.can_skip = True
+            self.speed = self.start_speed
+            self.end = False
+
+        def delete_I(self):
+            self.tetrominos.pop(2)
+
+        def get_tetromino(self):
+            m = []
+            for tetromino in self.tetrominos.values():
+                m.append(tetromino)
+            r = renpy.random.choice(m)
+            return r
+
+        def get_tetromino_i(self, i):
+            return self.tetrominos.get(i)
+
+        def clear(self, end=False):
+            i = 0
+            for cell in self.field:
+                for color in coloring:
+                    if cell == color:
+                        self.field[i] = symb_field
+                i += 1
+            if end:
+                self.end_turn()
+
+        def delete(self):
+            self.clear(end=True)
+            self.bonus -= 1
+
+        def draw_tetromino(self):
+            self.clear()
+            j = self.tetromino_index_start()
+            i = 0
+            for cell in self.tetromino:
+                if cell:
+                    # Tetromino O
+                    if self.tetromino == [1,1, 1,1]:
+                        self.field[self.active+j] = symb_yellow
+                    # Tetromino I
+                    elif self.tetromino == [1,1,1,1, 0,0,0,0] or self.tetromino == [0,0,0,0, 1,1,1,1]:
+                        self.field[self.active+j] = symb_purple
+                    # Tetromino J
+                    elif self.tetromino == [1,0,0, 1,1,1] and not self.rotate or self.tetromino == [1,1,1, 0,0,1] and self.rotate == 180:
+                        self.field[self.active+j] = symb_blue
+                    elif self.tetromino == [1,1, 1,0, 1,0] and self.rotate == 90 or self.tetromino == [0,1, 0,1, 1,1] and self.rotate == 270:
+                        self.field[self.active+j] = symb_blue
+                    # Tetromino L
+                    elif self.tetromino == [0,0,1, 1,1,1] and not self.rotate or self.tetromino == [1,1,1, 1,0,0] and self.rotate == 180:
+                        self.field[self.active+j] = symb_orange
+                    elif self.tetromino == [1,0, 1,0, 1,1] and self.rotate == 90 or self.tetromino == [1,1, 0,1, 0,1] and self.rotate == 270:
+                        self.field[self.active+j] = symb_orange
+                    # Tetromino S
+                    elif self.tetromino == [0,1,1, 1,1,0] and not self.rotate or self.tetromino == [0,1,1, 1,1,0] and self.rotate == 180:
+                        self.field[self.active+j] = symb_green
+                    elif self.tetromino == [1,0, 1,1, 0,1] and self.rotate == 90 or self.tetromino == [1,0, 1,1, 0,1] and self.rotate == 270:
+                        self.field[self.active+j] = symb_green
+                    # Tetromino Z
+                    elif self.tetromino == [1,1,0, 0,1,1] and not self.rotate or self.tetromino == [1,1,0, 0,1,1] and self.rotate == 180:
+                        self.field[self.active+j] = symb_red
+                    elif self.tetromino == [0,1, 1,1, 1,0] and self.rotate == 90 or self.tetromino == [0,1, 1,1, 1,0] and self.rotate == 270:
+                        self.field[self.active+j] = symb_red
+                    # Tetromino T
+                    elif self.tetromino == [0,1,0, 1,1,1] and not self.rotate or self.tetromino == [1,1,1, 0,1,0] and self.rotate == 180:
+                        self.field[self.active+j] = symb_cyan
+                    elif self.tetromino == [1,0, 1,1, 1,0] and self.rotate == 90 or self.tetromino == [0,1, 1,1, 0,1] and self.rotate == 270:
+                        self.field[self.active+j] = symb_cyan
+
+                j = self.tetromino_index_count(j, i)
+                i += 1
+
+        def new(self):
+            self.line_checker()
+
+            self.rotate = 0
+            self.active = self.center()
+            self.tetromino = self.next
+            self.next = self.get_tetromino()
+
+            self.draw_tetromino()
+            self.block = False
+            self.can_rotation = True
+
+        def move(self):
+            if self.check_let(offset=row*2):
+                self.slow()
+
+            if self.check_let():
+                self.end_turn()
+                return
+
+            self.active += row
+            self.draw_tetromino()
+
+        def shift(self, line):
+            for l in reversed(range(1, line+1)):
+                a = l*row
+                b = a+row
+                c = (l-1)*row
+                d = c+row
+                self.field[a:b] = self.field[c:d]
+                self.field[c:d] = [symb_field]*row
+
+        def fast(self):
+            self.speed = speed_acceleration
+        def slow(self):
+            self.speed_update()
+        def boost(self):
+            if self.speed == speed_acceleration:
+                self.slow()
+            else:
+                self.fast()
+
+        def left(self):
+            x = self.find_x_cell(left=True)
+            if x > 0:
+                if not self.check_let(offset=-1-row):
+                    self.active -= 1
+                    self.draw_tetromino()
+
+        def right(self):
+            x = self.find_x_cell(right=True)
+            if x < row-1:
+                if not self.check_let(offset=1-row):
+                    self.active += 1
+                    self.draw_tetromino()
+
+        def find_x_cell(self, left=False, right=False):
+            m = []
+            i = 0
+            x = 0
+            for cell in self.field:
+                for color in coloring:
+                    if cell == color:
+                        x,y = self.coordinate_index(i)
+                        m.append(x)
+                i += 1
+
+            if m != []:
+                if left:
+                    x = min(m)
+                elif right:
+                    x = max(m)
+
+            return x
+
+        def outward(self):
+            j = self.tetromino_index_start()
+            k = 0
+            for cell in self.tetromino:
+                if cell:
+                    i = self.active+j
+                    x,y = self.coordinate_index(i)
+                    xx, yy = self.coordinate()
+                    if xx >= row-3:
+                        if x == 0:
+                            return True
+                j = self.tetromino_index_count(j, k)
+                k += 1
+            return False
+
+        def check_let(self, offset=0):
+            j = self.tetromino_index_start()
+            k = 0
+            for cell in self.tetromino:
+                if cell:
+                    i = (self.active+j)+row+offset
+                    x,y = self.coordinate_index(i)
+                    if y <= column-1:
+                        for color in coloring:
+                            if self.field[i] == color.lower():
+                                return True
+                    else:
+                        return True
+                j = self.tetromino_index_count(j, k)
+                k += 1
+            return False
+
+        def check_let_for_skip(self, offset=0):
+            j = self.tetromino_index_start()
+            k = 0
+            for cell in self.tetromino:
+                if cell:
+                    i = (self.active+j)+row+offset
+                    x,y = self.coordinate_index(i)
+                    if y <= column-1:
+                        for color in coloring:
+                            if self.field[i] == color.lower():
+                                return self.active+offset
+                    else:
+                        return self.active+offset
+                j = self.tetromino_index_count(j, k)
+                k += 1
+
+        def skip(self):
+            self.can_skip = False
+            for c in range(column):
+                s = self.check_let_for_skip(offset=row*c)
+                if s:
+                    break
+
+            self.active = s
+            self.draw_tetromino()
+            self.end_turn()
+
+        def can_skip_reload(self):
+            self.can_skip = True
+
+        def tetromino_index_start(self):
+            l = len(self.tetromino)
+            j = 0 if l == 8 else -1
+            return j
+
+        def tetromino_index_count(self, j, i):
+            l = len(self.tetromino)
+
+            if self.rotate == 90:
+                if i == 1 or i == 3:
+                    j += row-2
+
+            elif self.rotate == 180:
+                if l == 6:
+                    if j == 1:
+                        j += row-3
+                elif l == 8:
+                    j += row-1
+
+            elif self.rotate == 270:
+                if i == 1 or i == 3:
+                    j += row-2
+
+            else:
+                if l == 4:
+                    if j == 0:
+                        j += row-2
+                elif l == 8:
+                    pass
+
+                else:
+                    if j == 1:
+                        j += row-3
+            j += 1
+            return j
+
+        def coordinate(self):
+            i = self.active
+            y = i // row
+            x = i - y*row
+            return x,y
+
+        def coordinate_index(self, i):
+            y = i // row
+            x = i - y*row
+            return x,y
+
+        def hardening(self):
+            i = 0
+            for cell in self.field:
+                for color in coloring:
+                    if cell == color:
+                        self.field[i] = color.lower()
+                i+=1
+
+        def rotation(self):
+            l = len(self.tetromino)
+            temp = self.tetromino[:]
+            temp_rotate = self.rotate
+
+            if l == 8:
+                self.rotate = 180 if not self.rotate else False
+            elif l == 6:
+                if not self.rotate:
+                    self.rotate = 90
+                    if self.tetromino == [1,0,0, 1,1,1]:
+                        self.tetromino = [1,1, 1,0, 1,0]
+                    elif self.tetromino == [0,0,1, 1,1,1]:
+                        self.tetromino = [1,0, 1,0, 1,1]
+                    elif self.tetromino == [0,1,1, 1,1,0]:
+                        self.tetromino = [1,0, 1,1, 0,1]
+                    elif self.tetromino == [1,1,0, 0,1,1]:
+                        self.tetromino = [0,1, 1,1, 1,0]
+                    elif self.tetromino == [0,1,0, 1,1,1]:
+                        self.tetromino = [1,0, 1,1, 1,0]
+
+                elif self.rotate == 90:
+                    self.rotate = 180
+                    if self.tetromino == [1,1, 1,0, 1,0]:
+                        self.tetromino = [1,0,0, 1,1,1]
+                    elif self.tetromino == [1,0, 1,0, 1,1]:
+                        self.tetromino = [0,0,1, 1,1,1]
+                    elif self.tetromino == [1,0, 1,1, 0,1]:
+                        self.tetromino = [0,1,1, 1,1,0]
+                    elif self.tetromino == [0,1, 1,1, 1,0]:
+                        self.tetromino = [1,1,0, 0,1,1]
+                    elif self.tetromino == [1,0, 1,1, 1,0]:
+                        self.tetromino = [0,1,0, 1,1,1]
+
+                    self.tetromino = self.tetromino[::-1]
+
+                elif self.rotate == 180:
+                    self.rotate = 270
+                    if self.tetromino == [1,1,1, 0,0,1]:
+                        self.tetromino = [0,1, 0,1, 1,1]
+                    elif self.tetromino == [1,1,1, 1,0,0]:
+                        self.tetromino = [1,1, 0,1, 0,1]
+                    elif self.tetromino == [0,1,1, 1,1,0]:
+                        self.tetromino = [1,0, 1,1, 0,1]
+                    elif self.tetromino == [1,1,0, 0,1,1]:
+                        self.tetromino = [0,1, 1,1, 1,0]
+                    elif self.tetromino == [1,1,1, 0,1,0]:
+                        self.tetromino = [0,1, 1,1, 0,1]
+
+                else:
+                    self.rotate = 0
+                    self.tetromino = self.tetromino[::-1]
+
+                    if self.tetromino == [1,1, 1,0, 1,0]:
+                        self.tetromino = [1,0,0, 1,1,1]
+                    elif self.tetromino == [1,0, 1,0, 1,1]:
+                        self.tetromino = [0,0,1, 1,1,1]
+                    elif self.tetromino == [1,0, 1,1, 0,1]:
+                        self.tetromino = [0,1,1, 1,1,0]
+                    elif self.tetromino == [0,1,1, 1,1,0]:
+                        self.tetromino = [1,1, 0,0, 1,1]
+                    elif self.tetromino == [1,0, 1,1, 1,0]:
+                        self.tetromino = [0,1,0, 1,1,1]
+
+            if self.check_let(offset=-row) or self.check_let() or self.outward():
+                self.rotate = temp_rotate
+                self.tetromino = temp[:]
+
+            self.draw_tetromino()
+
+        def center(self):
+            return int(row/2)
+
+        def stats_update(self, line):
+            self.lines += line
+            self.lines_counter += line
+            if self.lines_counter >= for_level:
+                self.level += 1
+                self.point += 100 * self.level
+                self.lines_counter -= for_level
+                self.speed_update()
+            point = 100 if line == 1 else 300 if line == 2 else 700 if line == 3 else 1500
+            self.point += point
+            if line == 4 and self.mode:
+                self.bonus += 1
+
+        def speed_update(self):
+            self.speed = self.start_speed - (self.level*0.01) if self.start_speed - (self.level*0.01) > speed_limit else speed_limit
+
+        def line_checker(self):
+            checker = 0
+            clear_line = 0
+            for line in range(column):
+                for cell in range(row):
+
+                    for color in coloring:
+                        if self.field[(line*row)+cell] == color.lower():
+                            checker += 1
+
+                    if checker == row:
+                        self.shift(line)
+                        clear_line += 1
+                checker = 0
+
+            if clear_line > 0:
+                renpy.vibrate(1.0)
+                self.stats_update(clear_line)
+
+        def highscore_update(self):
+            if persistent.highscore == [] or self.point > persistent.highscore[-1]:
+                persistent.highscore.append(self.point)
+                persistent.highscore.sort(reverse=True)
+                if len(persistent.highscore) > tops:
+                    persistent.highscore = persistent.highscore[:tops]
+
+        def end_checker(self):
+            for c in range(row):
+                for color in coloring:
+                    if self.field[row+c] == color.lower():
+                        self.end = True
+                        break
+
+        def end_turn(self):
+            self.slow()
+            self.can_rotation = False
+            self.hardening()
+            self.end_checker()
+            self.point += self.level
+            self.block = True
+            if self.end:
+                self.highscore_update()
+                renpy.hide_screen('draw_tetris')
+                renpy.show_screen('game_over')
+
+        def restart(self):
+            self.level = store.level
+            self.mode = store.mode
+            self.field = ['·']*(row*column)
+            self.speed = self.start_speed
+            self.active = 0
+            self.block = True
+            self.can_rotation = True
+            self.lines_counter = 0
+            self.lines = 0
+            self.point = 0
+            self.bonus = 0
+            self.end = False
+            self.speed_update()
+
+    def draw_next(n):
+        t = ''
+        l = len(n)
+        i = 0
+        for cell in n:
+            if cell:
+                # O
+                if n == [1,1, 1,1]:
+                    t += '{image=yellow.png}'
+                # I
+                elif n == [1,1,1,1, 0,0,0,0]:
+                    t += '{image=purple.png}'
+                # J
+                elif n == [1,0,0, 1,1,1]:
+                    t += '{image=blue.png}'
+                # L
+                elif n == [0,0,1, 1,1,1]:
+                    t += '{image=orange.png}'
+                # S
+                elif n == [0,1,1, 1,1,0]:
+                    t += '{image=green.png}'
+                # Z
+                elif n == [1,1,0, 0,1,1]:
+                    t += '{image=red.png}'
+                # T
+                elif n == [0,1,0, 1,1,1]:
+                    t += '{image=cyan.png}'
+            else:
+                t += '{image=empty.png}'
+
+            if l == 4:
+                if i == 1:
+                    t += '\n'
+            elif l == 6:
+                if i == 2:
+                    t += '\n'
+            elif l == 8:
+                if i == 3:
+                    t += '\n'
+            i+=1
+
+        return t
+
+    key_left = False
+    key_right = False
+    import pygame
+    class KeyCatcher(renpy.Displayable):
+        def render(self,w,h,st,at):
+            return Null().render(w,h,st,at)
+        def event(self, event, x, y, st):
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    store.key_left = True
+                elif event.key == pygame.K_RIGHT:
+                    store.key_right = True
+
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    store.key_left = False
+                elif event.key == pygame.K_RIGHT:
+                    store.key_right = False
+
+    def brightness(image, b=0.2):
+        return im.MatrixColor(image, im.matrix.brightness(b))
+
+image im_key = KeyCatcher()
+
+### TETRIS DRAW SCREEN ###
+screen draw_tetris():
+    frame xysize 750,940 align .5,.5:
+        add 'im_key'
+        add '#fff' size 550, 930 xpos 0
+        frame xysize 35*row,35*column yalign .5 xalign .37 xanchor .5:
+            add 'back.jpg' align .5,.5 size 35*row,35*column
+
+        vbox yalign .5 xalign .37 xanchor .5:
+            for clm in range(column):
+                hbox:
+                    for cell in tetris.field[row*clm : row*(clm+1)]:
+
+                        if cell == symb_red or cell == symb_red.lower():
+                            add 'red.png'
+                        elif cell == symb_green or cell == symb_green.lower():
+                            add 'green.png'
+                        elif cell == symb_blue or cell == symb_blue.lower():
+                            add 'blue.png'
+
+                        elif cell == symb_yellow or cell == symb_yellow.lower():
+                            add 'yellow.png'
+                        elif cell == symb_cyan or cell == symb_cyan.lower():
+                            add 'cyan.png'
+                        elif cell == symb_purple or cell == symb_purple.lower():
+                            add 'purple.png'
+                        elif cell == symb_orange or cell == symb_orange.lower():
+                            add 'orange.png'
+
+                        else:
+                            add 'empty.png'
+
+        if renpy.variant("small"):
+            $ vboxalign = (1.26, .2)
+        else:
+            $ vboxalign = (1.18, .2)
+
+        vbox align vboxalign xsize 140:
+            text 'NEXT:' xanchor 1.0
+            text '%s'%(draw_next(tetris.next)) xanchor 1.0
+
+            null height 60
+            text 'LEVEL:' xanchor 1.0
+            text '%s'%(tetris.level) xanchor 1.0
+            text 'LINES:' xanchor 1.0
+            text '%s'%(tetris.lines) xanchor 1.0
+            text 'SCORE:' xanchor 1.0
+            text '%s'%(tetris.point) xanchor 1.0
+
+            text 'HIGHS:' xanchor 1.0
+            $ highscore = persistent.highscore[0] if persistent.highscore != [] else 0
+            text '%s'%(highscore) xanchor 1.0
+
+            if tetris.mode:
+                null height 50
+                text 'BONUS:' xanchor 1.0
+                text '%s'%(tetris.bonus) xanchor 1.0
+
+    if renpy.variant("small"):
+        button background 'gui/left.png' hover_background brightness('gui/left.png') xysize 250, 250 focus_mask True action Function(tetris.left) align .03,.9
+        button background 'gui/right.png' hover_background brightness('gui/right.png') xysize 250, 250 focus_mask True action Function(tetris.right) align .195,.9
+        button background 'gui/down.png' hover_background brightness('gui/down.png') xysize 250, 250 focus_mask True action Function(tetris.boost) align .81,.9
+        button background 'gui/rotate.png' hover_background brightness('gui/rotate.png') xysize 250, 250 focus_mask True action If(tetris.can_rotation, Function(tetris.rotation)) align .97,.9
+        if tetris.bonus:
+            button background 'gui/bonus.png' hover_background brightness('gui/bonus.png') xysize 250, 250 focus_mask True action Function(tetris.delete) align .89,.5
+
+    # PC
+    else:
+        if tetris.can_skip:
+            key 'K_RETURN' action Function(tetris.skip)
+        else:
+            timer .2 action Function(tetris.can_skip_reload)
+        if tetris.can_rotation:
+            key 'mousedown_1' action Function(tetris.rotation)
+            key 'K_UP' action Function(tetris.rotation)
+        if tetris.bonus:
+            key 'mousedown_2' action Function(tetris.delete)
+            key 'K_SPACE' action Function(tetris.delete)
+
+        key 'mousedown_3' action Function(tetris.boost)
+        key 'mouseup_3' action Function(tetris.slow)
+        key 'K_DOWN' action Function(tetris.boost)
+
+        key 'K_RIGHT' action Function(tetris.right)
+        if key_right:
+            use keydown_right_move
+
+        key 'K_LEFT' action Function(tetris.left)
+        if key_left:
+            use keydown_left_move
+
+    use tetromino_animation
+
+screen keydown_right_move():
+    timer 0.05 repeat True action Function(tetris.right)
+screen keydown_left_move():
+    timer 0.05 repeat True action Function(tetris.left)
+screen tetromino_animation():
+    timer tetris.speed repeat True action If(tetris.block, Function(tetris.new), Function(tetris.move))
+
+### GAME OVER SCREEN ###
+screen game_over():
+    add '#000'
+    vbox align (.5,.45) xsize 500:
+        text 'GAME OVER' size 50 xalign .5
+        text 'Уровень: [tetris.level]' size 40 xalign .5
+        text 'Линии: [tetris.lines]' size 40 xalign .5
+        text 'Очки: [tetris.point]' size 40 xalign .5
+        null height 20
+        $ i = 1
+        for highscore in persistent.highscore:
+            if highscore == tetris.point:
+                text 'top [i]: [highscore]' size 45 xalign .5 color '#f00'
+            else:
+                text 'top [i]: [highscore]' size 40 xalign .5
+            $ i += 1
+    textbutton 'Выход' action Hide('game_over'), Jump('tesst') align .5,.9
+
+label tetris_start:
+
+    call screen difficulty_choice
+
+    $ tetris = Tetris(speed=speed, mode=mode, level=level, bonus=0)
+    $ tetris.speed_update()
+    if impossible:
+        $ tetris.delete_I()
+
+    call screen draw_tetris
+
+label tetris_reload:
+    $ tetris.restart()
+    call screen draw_tetris
+
+
+init python:
+    def set_mode_classic():
+        store.row = 10
+        store.column = 20
+        store.speed = 0.4
+    def set_mode_new():
+        store.row = 12
+        store.column = 25
+        store.speed = 0.3
+        store.mode = True
+    def set_mode_hard():
+        store.row = 13
+        store.column = 25
+        store.speed = 0.2
+        store.mode = True
+    def set_mode_impos():
+        store.row = 15
+        store.column = 26
+        store.speed = 0.2
+        store.impossible = True
+
+screen difficulty_choice():
+    vbox align .5,.5 spacing 30:
+        button background '#888' hover_background '#fff' xysize 1280,720 action Function(set_mode_classic), Return():
+            text 'Играть' align .5,.5 size 60 color '#000'
+
+
+
 
 
 

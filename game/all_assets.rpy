@@ -236,6 +236,11 @@ init python:
 define persistent.trans_ending = True
 default persistent.clearall = None
     
+define wipeleft_scene = MultipleTransition([
+    False, ImageDissolve("images/menu/wipeleft.png", 0.5, ramplen=64),
+    Solid("#000"), Pause(0.25),
+    Solid("#000"), ImageDissolve("images/menu/wipeleft.png", 0.5, ramplen=64),
+    True])
 
 
 ################## Characters ####################
@@ -290,6 +295,7 @@ init:
     image mon_kiton ="images/bg/monika_kitchen_on.jpg"
     image mon_bath ="images/bg/monika_bathroom.jpg"
     image mon_hall ="images/bg/monika_hall.jpg"
+    image home_hall ="images/bg/home_hall.jpg"
     image sportzal ="images/bg/sportzal.jpg"
     image true_end ="images/bg/monika_bg_glitch.png"
     image stolovaya ="images/bg/dining_hall.jpg"
@@ -313,6 +319,8 @@ init:
     image wheel_all ="images/bg/wheel_all.jpg"
     image city_road ="images/bg/city_road.jpg"
     image rollercoaster ="images/bg/rollercoaster.jpg"
+    image city ="images/bg/city.jpg"
+    image sky ="images/bg/sky.jpg"
 
 
 
