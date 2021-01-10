@@ -5079,4 +5079,6 @@ label day2:
 
     if monscene1 = True:
         jump day_mon
+    else:
+        jump demo_end
 
