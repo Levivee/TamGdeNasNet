@@ -2,13 +2,117 @@
 errors listed below, and try again.
 
 
-File "game/script-day2.rpy", line 4973: expected statement.
-    mom: "[name], дорогой, как у тебя сегодня день?"
-       ^
+The label day2 is defined twice, at
+  File "game/script.rpy", line 1923 and
+  File "game/script-day2.rpy", line 1.
 
-File "game/script-day2.rpy", line 4980: expected statement.
-    mom: "Конечно, до вечера, малыш."
-       ^
+The label rps is defined twice, at
+  File "game/script.rpy", line 7007 and
+  File "game/script-monika.rpy", line 1.
+
+The label balbes2 is defined twice, at
+  File "game/script.rpy", line 7150 and
+  File "game/script-monika.rpy", line 144.
+
+The label demomo is defined twice, at
+  File "game/script.rpy", line 7158 and
+  File "game/script-monika.rpy", line 152.
+
+The label fight1 is defined twice, at
+  File "game/script.rpy", line 7171 and
+  File "game/script-monika.rpy", line 165.
+
+The label loop_one1 is defined twice, at
+  File "game/script.rpy", line 7182 and
+  File "game/script-monika.rpy", line 176.
+
+The label far_away1 is defined twice, at
+  File "game/script.rpy", line 7226 and
+  File "game/script-monika.rpy", line 220.
+
+The label loop_two1 is defined twice, at
+  File "game/script.rpy", line 7237 and
+  File "game/script-monika.rpy", line 231.
+
+The label faar_away1 is defined twice, at
+  File "game/script.rpy", line 7281 and
+  File "game/script-monika.rpy", line 275.
+
+The label loop_three1 is defined twice, at
+  File "game/script.rpy", line 7296 and
+  File "game/script-monika.rpy", line 290.
+
+The label faaar_away1 is defined twice, at
+  File "game/script.rpy", line 7340 and
+  File "game/script-monika.rpy", line 334.
+
+The label loop_four1 is defined twice, at
+  File "game/script.rpy", line 7370 and
+  File "game/script-monika.rpy", line 364.
+
+The label faaaar_away1 is defined twice, at
+  File "game/script.rpy", line 7414 and
+  File "game/script-monika.rpy", line 408.
+
+The label loop_five1 is defined twice, at
+  File "game/script.rpy", line 7428 and
+  File "game/script-monika.rpy", line 422.
+
+The label faaaar_aaway1 is defined twice, at
+  File "game/script.rpy", line 7472 and
+  File "game/script-monika.rpy", line 466.
+
+The label loop_six1 is defined twice, at
+  File "game/script.rpy", line 7516 and
+  File "game/script-monika.rpy", line 510.
+
+The label faaaar_aaaway1 is defined twice, at
+  File "game/script.rpy", line 7560 and
+  File "game/script-monika.rpy", line 554.
+
+The label loop_seven1 is defined twice, at
+  File "game/script.rpy", line 7581 and
+  File "game/script-monika.rpy", line 575.
+
+The label faaaar_aaaaway1 is defined twice, at
+  File "game/script.rpy", line 7625 and
+  File "game/script-monika.rpy", line 619.
+
+The label day_mon is defined twice, at
+  File "game/script.rpy", line 7638 and
+  File "game/script-monika.rpy", line 632.
+
+The label day_mon2 is defined twice, at
+  File "game/script.rpy", line 9474 and
+  File "game/script-monika.rpy", line 2468.
+
+The label aftergame is defined twice, at
+  File "game/script.rpy", line 10456 and
+  File "game/script-monika.rpy", line 3450.
+
+The label plays is defined twice, at
+  File "game/script.rpy", line 10577 and
+  File "game/script-monika.rpy", line 3571.
+
+The label aftergame1 is defined twice, at
+  File "game/script.rpy", line 10622 and
+  File "game/script-monika.rpy", line 3616.
+
+The label tetris_start is defined twice, at
+  File "game/script.rpy", line 11290 and
+  File "game/script-monika.rpy", line 4284.
+
+The label tetris_reload is defined twice, at
+  File "game/script.rpy", line 11301 and
+  File "game/script-monika.rpy", line 4295.
+
+The label day_mon3 is defined twice, at
+  File "game/script.rpy", line 11332 and
+  File "game/script-monika.rpy", line 4326.
+
+The label epilog_mon is defined twice, at
+  File "game/script.rpy", line 11463 and
+  File "game/script-monika.rpy", line 4457.
 
 Ren'Py Version: Ren'Py 7.3.5.606
-Mon Dec 07 20:32:20 2020
+Sun Jan 10 20:06:39 2021

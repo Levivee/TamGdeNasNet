@@ -12,6 +12,7 @@ label start:
     else:
         jump true_ending
 
+
 label day1:
     $ renpy.music.stop()
     $ skip_text_blocks = True
@@ -320,7 +321,7 @@ label day1:
             hide m010
             show m000
             me "Спасибо за приглашение, но я, пожалуй, откажусь."
-            if monika < -1:  # (проверка на "нагрубили ли в первый раз")
+            if monika < 0:  # (проверка на "нагрубили ли в первый раз")
                 $ monika -= 1
                 hide m000
                 show m010
@@ -748,7 +749,7 @@ label day1:
             $ renpy.fix_rollback()
             # ДЕЙСТВИЕ 1/2: догнать саймона +1Сн
             $ saimon += 1
-            $ ticketS = False
+            $ ticketS = True
             me "Подожди меня тут."
             hide s102
             show s107
@@ -1453,7 +1454,8 @@ label day1:
             hide m100
             show m107
             mon "Да ничего, не оправдывайся."
-            if monika > 6:
+            $ dance = False
+            if monika > 5:
                 $ dance = True
                 #ЕСЛИ >6М, то
                 hide m107
@@ -1776,7 +1778,7 @@ label day1:
 
 #завершение выбора действия
 
-    if key1 == True and saimon < 7:
+    if key1 == True and saimon < 8:
         #ЕСЛИ key1 = true И <7Сн (ключ Саймону НЕ отдали), то
         "Времени осталось слишком мало… Возможно, ключ от учительской мне поможет."
         "Кажется, учителя говорили, что проверят экзамен сегодня, чтобы аттестаты завтра были уже готовы."
@@ -1802,7 +1804,7 @@ label day1:
 
     "С этими мыслями я и уснул."
 #//окончание первого дня
-    call day2
+    jump day2
     jump demo_end
 
 screen battletime:
@@ -1919,4 +1921,7 @@ label true_ending:
     $ quick_end = True
     $ renpy.quit()
     return
+
+
+
 

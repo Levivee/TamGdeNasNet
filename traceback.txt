@@ -1,32 +1,24 @@
 ﻿I'm sorry, but an uncaught exception occurred.
 
 While running game code:
-  File "game/script.rpy", line 1805, in script call
-    call day2
-  File "game/script-day2.rpy", line 4901, in script
-    if monscene1 == True:
-  File "game/script-day2.rpy", line 4935, in <module>
-    elif alscene1 == True:
-NameError: name 'alscene1' is not defined
+  File "game/script.rpy", line 7007, in script
+    jump day_mon
+SyntaxError: invalid syntax (game/script.rpy, line 7007)
 
 -- Full Traceback ------------------------------------------------------------
 
 Full traceback:
-  File "game/script.rpy", line 1805, in script call
-    call day2
-  File "game/script-day2.rpy", line 4901, in script
-    if monscene1 == True:
+  File "game/script.rpy", line 7007, in script
+    jump day_mon
   File "C:\renpy-7.3.5-sdk\renpy\ast.py", line 1832, in execute
     if renpy.python.py_eval(condition):
-  File "C:\renpy-7.3.5-sdk\renpy\python.py", line 2059, in py_eval
-    return py_eval_bytecode(code, globals, locals)
-  File "C:\renpy-7.3.5-sdk\renpy\python.py", line 2052, in py_eval_bytecode
-    return eval(bytecode, globals, locals)
-  File "game/script-day2.rpy", line 4935, in <module>
-    elif alscene1 == True:
-NameError: name 'alscene1' is not defined
+  File "C:\renpy-7.3.5-sdk\renpy\python.py", line 2057, in py_eval
+    code = py_compile(code, 'eval')
+  File "C:\renpy-7.3.5-sdk\renpy\python.py", line 692, in py_compile
+    raise e
+SyntaxError: invalid syntax (game/script.rpy, line 7007)
 
 Windows-8-6.2.9200
 Ren'Py 7.3.5.606
 TamGdeNasNet 1.0
-Mon Dec 07 21:38:42 2020
+Sun Jan 10 20:25:34 2021

@@ -2,16 +2,83 @@ label rps:
     $ win = 0
     $ lose = 0
     $ rps_beats = [("камень", "ножницы"), ("ножницы", "бумага"), ("бумага", "камень")]
-    if win > 1:
+    if win > 0:
         show a407 with dissolve
         al "Да блин!"
         hide a407 with dissolve
-    if lose > 1:
+    if lose > 0:
         show a419 with dissolve
         al "Опа! Ха!"
         hide a419 with dissolve
     else:
-        pass
+        if win = 2:
+            show a423 with dissolve
+            show m224 at right with dissolve
+            me "Ага! Все, ты обещал!"
+            hide a423
+            show a426
+            al "Да блин, это тебе повезло просто!"
+            me "Ничего не знаю, ты обещал."
+            hide a426
+            show a433
+            al "Приятно видеть, что тебя так любят."
+            hide a433 with moveoutleft
+            "Показательно вздохнув, Алан развернулся и пошел дальше по дорожке."
+            hide m224
+            show m225 at right
+            show m225 at center with move
+            mon "По-мужски, значит."
+            me "Прости, ну а что мне надо было делать?"
+            hide m225
+            show m207
+            mon "Да нет, ничего. Главное, что сработало."
+            hide m207
+            show m214
+            mon "Спасибо."
+            "Я почти физически почувствовал, как у меня за спиной вырастают крылья."
+            $ monwheel = true
+            hide m214
+            show m230
+            mon "Боже, неужели он и правда ушел."
+            me "Да уж, вот привяжется – не отстанет…"
+            return
+        if lose = 2:
+            show a410 with dissolve
+            show m222 at right with dissolve
+            al "Хе-хе, смотрите, кто выиграл!"
+            hide a410
+            show a411
+            hide m222
+            show m204 at right
+            mon "Да ладно, ты умудрился проиграть ему в этой дурацкой игре?!"
+            hide a411
+            show a402
+            al "Эй, попрошу, это вовсе не дурацкая игра!"
+            hide a402
+            show a403
+            al "Это международный способ узнать, кто круче!"
+            hide a403
+            show a420
+            hide m204
+            show m237 at right
+            al "Я круче."
+            hide m237
+            show m240 at right
+            mon "Слышишь, мистер я круче, давай ты все-таки уйдешь и оставишь нас в покое?"
+            hide a420
+            show a409
+            hide m240
+            show m204 at right
+            al "Ну нет, я честно выиграл!"
+            hide a409
+            show a410
+            hide m204
+            show m242 at right
+            al "И теперь никуда вы от меня не денетесь."
+            hide a410
+            show a419
+            "Господи Боже. {w}Да он специально решил над нами поиздеваться."
+            return
     menu:
         "Камень!":
             $ rps_player = "камень"
@@ -141,7 +208,7 @@ transform my_transform:
 
 
 
-label balbes:     ###  Метка куда мы перейдем если не успеем по времени
+label balbes2:     ###  Метка куда мы перейдем если не успеем по времени
     hide screen battletime
     hide screen timeout_event2  ### закрываем скрипт наших надписей, что бы они исчезли
     pause 0.1
@@ -162,7 +229,7 @@ label demomo:
     play sound "audio/SAVE_succes.wav"
     scene end1
     $ renpy.pause (8.0, hard=True)
-    menu fight:
+    menu fight1:
         "Битва":
             scene end2 with dissolve
             $ renpy.pause (3.0)
@@ -173,7 +240,7 @@ label demomo:
             $ timerjump = "balbes"
             $ my_timer = 10
             show screen my_scr
-            label loop_one:
+            label loop_one1:
                 $ res = ui.interact()
                 if res == "loser":
                     hide screen my_scr
@@ -193,7 +260,7 @@ label demomo:
 
                 if res not in u"qй":
                     $ renpy.pause(0.1, hard=True)
-                    jump loop_one
+                    jump loop_one1
 
                 hide text
                 show text("[res]") at my_transform
@@ -215,9 +282,9 @@ label demomo:
                     $ renpy.pause(0.0, hard=True)
                     jump far_away
                 else:
-                    jump loop_one
+                    jump loop_one1
 
-    label far_away:
+    label far_away1:
         hide screen battletime
         hide screen timeout_event2
         scene end5
@@ -228,7 +295,7 @@ label demomo:
         $ timerjump = "balbes"
         $ my_timer = 10
         show screen my_scr
-        label loop_two:
+        label loop_two1:
             $ res = ui.interact()
             if res == "loser":
                 hide screen my_scr
@@ -248,7 +315,7 @@ label demomo:
 
             if res not in u"wц":
                 $ renpy.pause(0.1, hard=True)
-                jump loop_two
+                jump loop_two1
 
             hide text
             show text("[res]") at my_transform
@@ -268,11 +335,11 @@ label demomo:
                 $ renpy.pause(0.1, hard=True)
                 $ renpy.pause(0.0, hard=True)
                 $ renpy.pause(0.0, hard=True)
-                jump faar_away
+                jump faar_away1
 
-            jump loop_two
+            jump loop_two1
 
-    label faar_away:
+    label faar_away1:
         hide screen battletime
         hide screen timeout_event2
         scene end7
@@ -287,7 +354,7 @@ label demomo:
         $ timerjump = "balbes"
         $ my_timer = 10
         show screen my_scr
-        label loop_three:
+        label loop_three1:
             $ res = ui.interact()
             if res == "loser":
                 hide screen my_scr
@@ -307,7 +374,7 @@ label demomo:
 
             if res not in u"eу":
                 $ renpy.pause(0.1, hard=True)
-                jump loop_three
+                jump loop_three1
 
             hide text
             show text("[res]") at my_transform
@@ -327,11 +394,11 @@ label demomo:
                 $ renpy.pause(0.1, hard=True)
                 $ renpy.pause(0.0, hard=True)
                 $ renpy.pause(0.0, hard=True)
-                jump faaar_away
+                jump faaar_away1
 
-            jump loop_three
+            jump loop_three1
 
-    label faaar_away:
+    label faaar_away1:
         hide screen battletime
         hide screen timeout_event2
         scene end9 with dissolve
@@ -361,7 +428,7 @@ label demomo:
         $ timerjump = "balbes"
         $ my_timer = 10
         show screen my_scr
-        label loop_four:
+        label loop_four1:
             $ res = ui.interact()
             if res == "loser":
                 hide screen my_scr
@@ -381,7 +448,7 @@ label demomo:
 
             if res not in u"rкhр":
                 $ renpy.pause(0.1, hard=True)
-                jump loop_four
+                jump loop_four1
 
             hide text
             show text("[res]") at my_transform
@@ -401,11 +468,11 @@ label demomo:
                 $ renpy.pause(0.1, hard=True)
                 $ renpy.pause(0.0, hard=True)
                 $ renpy.pause(0.0, hard=True)
-                jump faaaar_away
+                jump faaaar_away1
 
-            jump loop_four
+            jump loop_four1
 
-    label faaaar_away:
+    label faaaar_away1:
         hide screen battletime
         hide screen timeout_event2
         play sound "sounds/soul_battle_flash.wav"
@@ -419,7 +486,7 @@ label demomo:
         $ timerjump = "balbes"
         $ my_timer = 10
         show screen my_scr
-        label loop_five:
+        label loop_five1:
             $ res = ui.interact()
             if res == "loser":
                 hide screen my_scr
@@ -439,7 +506,7 @@ label demomo:
 
             if res not in u"dвlдkл":
                 $ renpy.pause(0.1, hard=True)
-                jump loop_five
+                jump loop_five1
 
             hide text
             show text("[res]") at my_transform
@@ -459,11 +526,11 @@ label demomo:
                 $ renpy.pause(0.1, hard=True)
                 $ renpy.pause(0.0, hard=True)
                 $ renpy.pause(0.0, hard=True)
-                jump faaaar_aaway
+                jump faaaar_aaway1
 
-            jump loop_five
+            jump loop_five1
 
-    label faaaar_aaway:
+    label faaaar_aaway1:
         hide screen battletime
         hide screen timeout_event2
         scene x12 with dissolve
@@ -507,7 +574,7 @@ label demomo:
         $ timerjump = "balbes"
         $ my_timer = 10
         show screen my_scr
-        label loop_six:
+        label loop_six1:
             $ res = ui.interact()
             if res == "loser":
                 hide screen my_scr
@@ -527,7 +594,7 @@ label demomo:
 
             if res not in u"nтaф":
                 $ renpy.pause(0.1, hard=True)
-                jump loop_six
+                jump loop_six1
 
             hide text
             show text("[res]") at my_transform
@@ -547,11 +614,11 @@ label demomo:
                 $ renpy.pause(0.1, hard=True)
                 $ renpy.pause(0.0, hard=True)
                 $ renpy.pause(0.0, hard=True)
-                jump faaaar_aaaway
+                jump faaaar_aaaway1
 
-            jump loop_six
+            jump loop_six1
 
-    label faaaar_aaaway:
+    label faaaar_aaaway1:
         hide screen battletime
         hide screen timeout_event2
         scene x30
@@ -572,7 +639,7 @@ label demomo:
         $ timerjump = "balbes"
         $ my_timer = 10
         show screen my_scr
-        label loop_seven:
+        label loop_seven1:
             $ res = ui.interact()
             if res == "loser":
                 hide screen my_scr
@@ -592,7 +659,7 @@ label demomo:
 
             if res not in u"gпbиoщ":
                 $ renpy.pause(0.1, hard=True)
-                jump loop_seven
+                jump loop_seven1
 
             hide text
             show text("[res]") at my_transform
@@ -612,11 +679,11 @@ label demomo:
                 $ renpy.pause(0.1, hard=True)
                 $ renpy.pause(0.0, hard=True)
                 $ renpy.pause(0.0, hard=True)
-                jump faaaar_aaaaway
+                jump faaaar_aaaaway1
 
-            jump loop_seven
+            jump loop_seven1
 
-    label faaaar_aaaaway:
+    label faaaar_aaaaway1:
         hide screen battletime
         hide screen timeout_event2
         if gamesara == True:
@@ -1386,72 +1453,7 @@ label day_mon:
             hide m237 with dissolve
             hide a414 with dissolve
             call rps
-            if win = 2:
-                show a423 with dissolve
-                show m224 at right with dissolve
-                me "Ага! Все, ты обещал!"
-                hide a423
-                show a426
-                al "Да блин, это тебе повезло просто!"
-                me "Ничего не знаю, ты обещал."
-                hide a426
-                show a433
-                al "Приятно видеть, что тебя так любят."
-                hide a433 with moveoutleft
-                "Показательно вздохнув, Алан развернулся и пошел дальше по дорожке."
-                hide m224
-                show m225 at right
-                show m225 at center with move
-                mon "По-мужски, значит."
-                me "Прости, ну а что мне надо было делать?"
-                hide m225
-                show m207
-                mon "Да нет, ничего. Главное, что сработало."
-                hide m207
-                show m214
-                mon "Спасибо."
-                "Я почти физически почувствовал, как у меня за спиной вырастают крылья."
-                $ monwheel = true
-                hide m214
-                show m230
-                mon "Боже, неужели он и правда ушел."
-                me "Да уж, вот привяжется – не отстанет…"
-            if lose = 2:
-                show a410 with dissolve
-                show m222 at right with dissolve
-                al "Хе-хе, смотрите, кто выиграл!"
-                hide a410
-                show a411
-                hide m222
-                show m204 at right
-                mon "Да ладно, ты умудрился проиграть ему в этой дурацкой игре?!"
-                hide a411
-                show a402
-                al "Эй, попрошу, это вовсе не дурацкая игра!"
-                hide a402
-                show a403
-                al "Это международный способ узнать, кто круче!"
-                hide a403
-                show a420
-                hide m204
-                show m237 at right
-                al "Я круче."
-                hide m237
-                show m240 at right
-                mon "Слышишь, мистер я круче, давай ты все-таки уйдешь и оставишь нас в покое?"
-                hide a420
-                show a409
-                hide m240
-                show m204 at right
-                al "Ну нет, я честно выиграл!"
-                hide a409
-                show a410
-                hide m204
-                show m242 at right
-                al "И теперь никуда вы от меня не денетесь."
-                hide a410
-                show a419
-                "Господи Боже. {w}Да он специально решил над нами поиздеваться."
+
     if monrock == False:
         hide a419
         show a424
@@ -1778,7 +1780,7 @@ label day_mon:
                 mon "Идем."
                 scene city_road with dissolve
                 stop music
-                play music "audio/a_promise_from_distant_days.ogg
+                play music "audio/a_promise_from_distant_days.ogg"
                 "Идти было недалеко, всего пару кварталов. {w}Однако они казались мне настоящей пыткой."
                 "Я чувствовал себя ужасно неловко из-за всего произошедшего, мне было почти стыдно перед Моникой."
                 "Чертов Алан, надо было все так испортить…"
@@ -3022,7 +3024,7 @@ label day_mon2:
             "С этими мыслями я закрыл глаза и провалился обратно в сон."
             scene black with dissolve
             #локация: черный экран
-            if sara > 0:
+            if sara > -1:
                 "Мне удалось поспать несколько часов, прежде чем мне опять позвонили."
                 "На этот раз это была Сара."
                 show s012 with dissolve
@@ -3621,6 +3623,8 @@ label day_mon2:
                         jump plays
                     "Закончить играть":
                         pass
+
+    jump day_mon3
 #завершение выбора действия (поехать ли на репетицию)
 #КОНЕЦ ЧЕТВЕРТОГО ДНЯ
 
@@ -4321,7 +4325,7 @@ screen difficulty_choice():
         button background '#888' hover_background '#fff' xysize 1280,720 action Function(set_mode_classic), Return():
             text 'Играть' align .5,.5 size 60 color '#000'
 
-label day_mon2:
+label day_mon3:
     if monearly == False:
         scene black with dissolve
         stop music
@@ -4330,7 +4334,7 @@ label day_mon2:
         "Заснуть быстро вчера не получилось, я все не мог выкинуть Монику из головы."
         "Даже сейчас, бегая и пытаясь одновременно чистить зубы и одеваться, {w} да еще и так, чтобы никто не заметил…"
         "…Я думал о ней."
-        "Это начинало надоедать. Мне ведь надо было сосредоточиться сейчас совсем на другом!
+        "Это начинало надоедать. Мне ведь надо было сосредоточиться сейчас совсем на другом!"
         "К примеру, наконец-то собрать вещи. {w}Я взял свою сумку, приготовленную где-то полгода назад."
         "Это должно быть легко, главное – ничего не забыть."
         ## мини-игра со сбором вещей ##
@@ -4343,7 +4347,7 @@ label day_mon2:
         "Итак, начнем. Дорогие мама и папа…"
         "Блин, как-то слишком банально, наверное. {w}Ой, ну и ладно."
         "Дорогие мама и папа. {w}Если вы это читаете, значит, я уже далеко отсюда."
-        "Я решил уехать из города и начать новую жизнь, потому что…
+        "Я решил уехать из города и начать новую жизнь, потому что…"
         "Потому что я… эм…"
         menu:
             "Не вижу будущего здесь":
@@ -4521,12 +4525,12 @@ label epilog_mon:
         "Но это все-таки… было немного другое."
     else:
         "Опять же, как и хотел, почти сразу заселился в общежитие, нашел новых знакомых, хороших и не очень…"
-    if saimon > 9:
+    if saimon > 8:
         "С Саймоном, кстати, я виделся всего пару раз, не более."
         "Так, чисто обменялись новостями да посидели кофе попили."
     else:
         "Саймона, кстати, я больше так и не видел."
-    if sara > 0:
+    if sara > -1:
         "Зато продолжал общаться с Моникой и Сарой."
     else:
         "Зато очень активно общался с Моникой."
@@ -4569,7 +4573,7 @@ label epilog_mon:
         "Хотя, если честно, вся эта затея с поездкой была под большим вопросом."
     if sMascot == True:
         "Ведь я даже летом так и не смог найти постоянную работу, перебивался подработками."
-       "А лотерейные деньги надо тратить с умом, а не разбрасываться ими направо и налево."
+        "А лотерейные деньги надо тратить с умом, а не разбрасываться ими направо и налево."
     else:
         "Ведь я даже летом так и не смог найти постоянную работу, а подработок отчаянно не хватало."
     "Так что параллельно со своим первым учебным месяцев я активно старался заработать везде, где только можно."

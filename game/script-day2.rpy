@@ -158,7 +158,7 @@ label day2:
             hide a204 with dissolve
             hide m014 with dissolve
             "Моника ничего не сказала на это, однако до самого конца репетиции я то и дело ловил ее благодарный взгляд."
-            if monika > 7:
+            if monika > 6:
                 #ЕСЛИ >7М, то
                 "Я сам не заметил, как начал улыбаться ей в ответ, чувствуя, как в груди разливается странное тепло."
                 "Пожалуй, это утро не такое уж и плохое…"
@@ -1814,10 +1814,10 @@ label day2:
             show rbk002 at right
             me "Да, конечно. Ребекка, обхвати меня за шею."
             hide rbk002
-            show rbk003
+            show rbk003 at right
             rb "…"
             hide rbk003
-            show rbk006
+            show rbk006 at right
             me "Вот так, идем."
             hide rbk006 with moveoutright
             hide tch003 with moveoutright
@@ -2027,7 +2027,7 @@ label day2:
             show a218
             al "Да какая к черту разница, меня по телеку покажут!"
             me "Действительно."
-            if alan > 7:
+            if alan > 6:
                 $ alscene = True
                 hide a218
                 show a224
@@ -2367,7 +2367,7 @@ label day2:
                 show s014
                 hide sa011
                 show sa002 at right
-                sara "Я пока пойду займу нам столик."
+                sar "Я пока пойду займу нам столик."
                 me "Хорошо, спасибо."
                 hide s014 with moveoutleft
                 hide sa002
@@ -2950,7 +2950,7 @@ label day2:
         me "Хорошо, я сейчас."
         hide s000 with dissolve
         "Уже идя к прилавку, я заметил Саймона. {w}Он сидел за столиком в самом углу кафе."
-        if saimon > 7:
+        if saimon > 6:
             $ attGS = True
             $ attG = True
             "Мы встретились взглядами, и он вдруг оживился. {w}Поднялся, закинул сумку на плечо и направился ко мне."
@@ -3465,7 +3465,7 @@ label day2:
     "На этот раз все прошло гладко, и уже через пять минут мы сидели и ели вкусную, еще горячую пиццу."
     $ wthsara = False
     $ day2early = False
-    if sara > 10:
+    if sara > 9:
         stop music
         play music "audio/Cocoon_illuminated_by_moonlight.mp3"
         if attGS == True:
@@ -4415,7 +4415,7 @@ label day2:
             show s046
             sar "Боже, ну ни секунды покоя с тобой нет!"
     else:
-        if sara > 0:
+        if sara > -1:
             stop music
             play music "audio/Theres_no_confirmation_so_I_pray.mp3"
             if attGS == True:
@@ -4843,7 +4843,7 @@ label day2:
                         if attG == False:
                             "Заодно попрошу и мой аттестат забрать."
                         "И попробую уговорить Саймона уехать вдвоем."
-                    elif sara > 10 or attGS == True:
+                    elif sara > 9 or attGS == True:
                         $ saitruescene = True
                         stop music
                         play music "audio/enigma.mp3"
@@ -5077,7 +5077,7 @@ label day2:
                 else:
                     "С этими мыслями я провалился в сон."
 
-    if monscene1 = True:
+    if monscene1 == True:
         jump day_mon
     else:
         jump demo_end
