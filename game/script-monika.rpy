@@ -1,26 +1,27 @@
 label rps:
+    return
     $ win = 0
     $ lose = 0
-    $ rps_beats = [("камень", "ножницы"), ("ножницы", "бумага"), ("бумага", "камень")]
+    $ rps_beats = [("камень", "ножницы"), ("ножницы", "бумагу"), ("бумагу", "камень")]
     if win > 0:
-        show a407 with dissolve
+        show a407 at left with dissolve
         al "Да блин!"
         hide a407 with dissolve
     if lose > 0:
-        show a419 with dissolve
+        show a419 at left with dissolve
         al "Опа! Ха!"
         hide a419 with dissolve
     else:
-        if win = 2:
+        if win >= 2:
             show a423 with dissolve
-            show m224 at right with dissolve
+            show m224 at left with dissolve
             me "Ага! Все, ты обещал!"
             hide a423
-            show a426
+            show a426 at left
             al "Да блин, это тебе повезло просто!"
             me "Ничего не знаю, ты обещал."
             hide a426
-            show a433
+            show a433 at left
             al "Приятно видеть, что тебя так любят."
             hide a433 with moveoutleft
             "Показательно вздохнув, Алан развернулся и пошел дальше по дорожке."
@@ -42,7 +43,7 @@ label rps:
             mon "Боже, неужели он и правда ушел."
             me "Да уж, вот привяжется – не отстанет…"
             return
-        if lose = 2:
+        if lose >= 2:
             show a410 with dissolve
             show m222 at right with dissolve
             al "Хе-хе, смотрите, кто выиграл!"
@@ -82,18 +83,18 @@ label rps:
     menu:
         "Камень!":
             $ rps_player = "камень"
-        "Бумага!":
-            $ rps_player = "бумага"
+        "Бумагу!":
+            $ rps_player = "бумагу"
         "Ножницы!":
             $ rps_player = "ножницы"
 
-    $ rps_npc = renpy.random.choice(["камень", "бумага", "ножницы"])
+    $ rps_npc = renpy.random.choice(["камень", "бумагу", "ножницы"])
 
-    al "Я выбрал %(rps_npc)!"
+    al "Я выбрал %(rps_npc)s"
 
     if (rps_player, rps_npc) in rps_beats:
         $ win +=1
-        show a404 with dissolve
+        show a404 at left with dissolve
         al "Рано радуешься, просто повезло."
         me "Да-да, конечно."
         hide a404 with dissolve
@@ -101,14 +102,14 @@ label rps:
 
     elif (rps_npc, rps_player) in rps_beats:
         $ lose += 1
-        show a410 with dissolve
+        show a410 at left with dissolve
         al "Ха! Съел?"
         me "Я еще отыграюсь."
         hide a410 with dissolve
         jump rps
 
     else:
-        show a410 with dissolve
+        show a410 at left with dissolve
         al "У-у-у, ситуация накаляется!"
         hide a404 with dissolve
         jump rps
@@ -1026,8 +1027,8 @@ label day_mon:
     stop music
     play music "audio/went_fishing_caught_a_girl.ogg"
     al "Какие люди! Да без охраны!"
-    hide a417 at left
-    show a405
+    hide a417
+    show a405 at left
     hide m223
     show m232
     mon "Алан!"

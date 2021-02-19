@@ -811,7 +811,7 @@ label day2:
                                     show tch005 at right
                                     tch "Ты ко мне?"
                                     hide tch005
-                                    show tch000
+                                    show tch000 at right
                                     hide m028
                                     show m017
                                     "Моника смотрела на меня, широко распахнув глаза."
@@ -820,7 +820,7 @@ label day2:
                                     show m027
                                     me "Мне… мне нужно было кое-что взять у Моники, вот и все."
                                     hide tch000
-                                    show tch004
+                                    show tch004 at right
                                     tch "А, ну тогда ладно. Всего доброго."
                                     hide tch004 with moveoutright
                                     me "До свидания… пока, Моника."
@@ -3055,7 +3055,7 @@ label day2:
             show s005 at left
             hide sa013
             show sa010
-            sara "Удачи, Саймон!"
+            sar "Удачи, Саймон!"
             hide s005
             show s006 at left
             hide sa010
